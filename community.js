@@ -147,7 +147,7 @@
             .map((s) => link(s[0], `<span>${s[3]}</span>${s[1]}`, "nav-item"))
             .join("")}`,
       )
-      .join("")}</nav><div class="sidebar-bottom">${link("saved", "<span>♧</span> 我的收藏", "nav-item")}${link("me", "<span>◌</span> 我的空间", "nav-item")}<div class="local-note"><i></i> 本机体验版<small>邀请制社区 · 独立于学校系统</small></div></div></aside><div class="workspace"><header class="topbar"><button class="mobile-menu" data-action="menu" aria-label="展开导航" aria-expanded="false">☰</button><span id="crumb">社区广场</span><form id="search-form" role="search"><label class="sr-only" for="global-search">搜索社区内容、课程、老师</label><span>⌕</span><input id="global-search" type="search" placeholder="搜内容、课程、老师…" maxlength="100"><kbd>/</kbd></form>${button("join", "邀请码加入", "quiet")}${button("compose", "＋ 发布", "primary")}</header><div class="preview-strip">正在浏览功能体验版 <span>标注「示例」的内容为演示；你的操作只保存在此浏览器。</span></div><main id="main" tabindex="-1"></main><footer>GBU 同行 · 学生自发的社区构想 <span>让经验留下，让相遇发生。</span></footer></div><dialog id="modal" aria-labelledby="modal-title"></dialog><div id="toast" role="status" hidden></div>`;
+      .join("")}</nav><div class="sidebar-bottom">${link("saved", "<span>♧</span> 我的收藏", "nav-item")}${link("me", "<span>◌</span> 我的空间", "nav-item")}<div class="local-note"><i></i> 本机体验版<small>正式版拟邀请制 · 不接学校统一认证</small></div></div></aside><div class="workspace"><header class="topbar"><button class="mobile-menu" data-action="menu" aria-label="展开导航" aria-expanded="false">☰</button><span id="crumb">社区广场</span><form id="search-form" role="search"><label class="sr-only" for="global-search">搜索社区内容、课程、老师</label><span>⌕</span><input id="global-search" type="search" placeholder="搜内容、课程、老师…" maxlength="100"><kbd>/</kbd></form>${button("join", "邀请码加入", "quiet")}${button("compose", "＋ 发布", "primary")}</header><div class="preview-strip">正在浏览功能体验版 <span>标注「示例」的内容为演示；你的操作只保存在此浏览器。</span></div><main id="main" tabindex="-1"></main><footer>GBU 同行 · 学生自发的社区构想 <span>让经验留下，让相遇发生。</span></footer></div><dialog id="modal" aria-labelledby="modal-title"></dialog><div id="toast" role="status" hidden></div>`;
   }
   function card(p, compact = false) {
     const st = store.get();
@@ -555,8 +555,8 @@
   }
   function join() {
     modal(
-      "用邀请，慢慢认识彼此",
-      `<div class="join-steps"><span>01<b>获得同学邀请</b><small>小范围开放，逐步建立社区。</small></span><span>02<b>独立账号与网名</b><small>未来使用邮箱注册，无需学校统一认证。</small></span><span>03<b>选择如何表达</b><small>可用网名，也可在支持的板块匿名发言。</small></span></div><div class="tip-line">邀请码验证与邮件服务尚未上线。目前可以体验本机发帖、收藏、回复与草稿，不会创建真实账号。</div>${button("dismiss", "先逛逛社区", "primary wide")}`,
+      "邀请制怎么运行",
+      `<p class="join-intro">邀请制是正式社区的准入设想，目的是让早期社区保持小而可信。它不代表学校官方认证或背书。</p><div class="join-steps"><span>01<b>面向 GBU 本科生</b><small>目前目标成员是大湾区大学本科生；现有原型网页仍可公开访问。</small></span><span>02<b>获得邀请码，再注册独立账号</b><small>建议首轮由项目运营者分阶段发放；以后是否允许成员邀请、每人名额及邀请码有效期，仍待确定。计划不接入 GBU 统一身份验证。</small></span><span>03<b>设置网名，选择表达方式</b><small>注册后使用独立网名；支持匿名的板块可按帖子选择匿名。正式版的隐私和管理规则需要另行制定。</small></span></div><div class="invite-scope"><b>邀请码能说明什么？</b><p>它用于控制谁能注册社区，不等于学校身份核验。若不接学校认证，邀请发放和社区治理需要承担成员范围管理。</p></div><div class="invite-status"><b>当前状态：邀请制尚未启用</b><p>这个公开网页是功能原型，没有邀请码输入、真实注册或服务端账号。你可以体验的发布、回复与收藏只保存在当前浏览器。</p></div>${button("dismiss", "明白，继续浏览", "primary wide")}`,
       "join",
     );
   }

@@ -1913,3 +1913,39 @@ footer {
     white-space: normal;
   }
 }
+.join-intro {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.join-steps {
+  gap: 17px;
+}
+.join-steps > span {
+  grid-template-columns: 34px 1fr;
+  line-height: 1.7;
+}
+.join-steps small {
+  line-height: 1.7;
+}
+.invite-scope,
+.invite-status {
+  padding: 15px 17px;
+  border-radius: 9px;
+  background: #f5f6f1;
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 13px;
+}
+.invite-scope p,
+.invite-status p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.invite-status {
+  background: #f7f0e7;
+  border: 1px solid #eee4d7;
+}
