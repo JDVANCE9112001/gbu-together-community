@@ -1760,3 +1760,156 @@ footer {
 .tag {
   color: #697b59;
 }
+
+.space-directory {
+  margin: 8px 0 34px;
+  padding: 25px 26px 8px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbfcf8;
+}
+.space-directory-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+.space-directory-heading h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 550;
+}
+.space-directory-heading .eyebrow {
+  margin-bottom: 6px;
+}
+.space-directory-heading > p {
+  max-width: 340px;
+  margin: 0 0 2px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.space-group {
+  padding: 15px 0 21px;
+  border-top: 1px solid var(--line);
+}
+.space-group-title {
+  display: flex;
+  align-items: baseline;
+  gap: 11px;
+  margin-bottom: 12px;
+}
+.space-group-title h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.space-group-title span {
+  color: #98a18e;
+  font-size: 10px;
+}
+.space-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+.space-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #edf0e8;
+  border-radius: 9px;
+  background: #fff;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.space-card:hover {
+  border-color: #b9c7a8;
+  transform: translateY(-1px);
+}
+.space-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 8px;
+  background: #edf2e7;
+  color: #728560;
+  font-size: 17px;
+}
+.space-icon.courses,
+.space-icon.teachers {
+  background: #eaf0f2;
+  color: #6c899a;
+}
+.space-icon.opinions {
+  background: #f3ece5;
+  color: #a48d75;
+}
+.space-icon.life {
+  background: #f2efdb;
+  color: #978b5f;
+}
+.space-card > span:nth-child(2) {
+  min-width: 0;
+}
+.space-card b,
+.space-card small {
+  display: block;
+}
+.space-card b {
+  margin-bottom: 3px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.space-card small {
+  overflow: hidden;
+  color: #929c88;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.space-arrow {
+  margin-left: auto;
+  color: #a0ad93;
+  font-size: 12px;
+}
+@media (max-width: 1000px) {
+  .space-directory {
+    padding: 21px 20px 5px;
+  }
+  .space-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 720px) {
+  .space-directory {
+    margin: 0 0 26px;
+    padding: 18px 14px 3px;
+  }
+  .space-directory-heading {
+    display: block;
+    margin-bottom: 16px;
+  }
+  .space-directory-heading h2 {
+    font-size: 17px;
+  }
+  .space-directory-heading > p {
+    margin-top: 7px;
+  }
+  .space-group {
+    padding: 13px 0 17px;
+  }
+  .space-grid {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+  .space-card {
+    padding: 10px;
+  }
+  .space-card small {
+    white-space: normal;
+  }
+}

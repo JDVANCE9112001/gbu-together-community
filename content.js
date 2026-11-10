@@ -1,16 +1,27 @@
 /* 页面内容集中放在这里，后续可在不改交互代码的情况下增删示例。 */
 window.GBU_CONTENT = {
   navigation: [
-    { id: "home", label: "首页", short: "社区首页", description: "看看最近的讨论与精选内容。" },
-    { id: "exchange", label: "校园交流", short: "校园交流", description: "想法、日常和那些不太适合发在大群里的话题。" },
-    { id: "partners", label: "找搭子", short: "找搭子", description: "按课程、目标和节奏，遇见愿意一起开始的人。" },
-    { id: "courses", label: "课程经验", short: "课程经验", description: "选课体验、学习方法、笔记与复习建议。" },
-    { id: "guide", label: "新生指南", short: "新生指南", description: "把校园适应与学习生活的经验慢慢整理下来。" },
-    { id: "opinions", label: "百家争鸣", short: "百家争鸣", description: "用网名或匿名写下观点、长文与不同声音。" },
-    { id: "boards", label: "兴趣贴吧", short: "兴趣贴吧", description: "围绕课程、兴趣和校园生活开主题吧。" },
-    { id: "teachers", label: "师资导航", short: "师资导航", description: "认识老师，从具体课程体验开始。" },
-    { id: "life", label: "生活区", short: "生活区", description: "分享餐饮外卖体验，看看同学口碑榜单。" },
-    { id: "roommates", label: "室友匹配", short: "室友匹配", description: "新生可先了解彼此的作息与住宿习惯。" }
+    { id: "home", label: "首页", short: "社区首页", description: "看看最近的讨论与精选内容。", group: "home", icon: "◉" },
+    { id: "exchange", label: "校园交流", short: "校园交流", description: "日常、关系与那些不太适合发在大群里的话题。", group: "social", icon: "◎" },
+    { id: "partners", label: "找搭子", short: "找搭子", description: "按目标、兴趣和相处节奏，发起两人或小组计划。", group: "social", icon: "↗" },
+    { id: "roommates", label: "室友匹配", short: "室友匹配", description: "新生可先了解彼此的作息与住宿习惯。", group: "social", icon: "⌂" },
+    { id: "courses", label: "课程经验", short: "课程经验", description: "选课体验、学习方法、笔记与复习建议。", group: "learn", icon: "▤" },
+    { id: "teachers", label: "师资导航", short: "师资导航", description: "认识老师，从具体课程体验开始。", group: "learn", icon: "◈" },
+    { id: "guide", label: "新生指南", short: "新生指南", description: "把校园适应与学习生活的经验慢慢整理下来。", group: "learn", icon: "◇" },
+    { id: "opinions", label: "百家争鸣", short: "百家争鸣", description: "用网名或匿名写下观点、长文与不同声音。", group: "life", icon: "✳" },
+    { id: "boards", label: "兴趣贴吧", short: "兴趣贴吧", description: "围绕课程、兴趣和校园生活开主题吧。", group: "life", icon: "▦" },
+    { id: "life", label: "生活区", short: "生活区", description: "分享餐饮外卖体验，看看同学口碑榜单。", group: "life", icon: "☷" }
+  ],
+  navigationGroups: [
+    { id: "social", label: "遇见彼此", description: "从轻松交流到一起行动" },
+    { id: "learn", label: "一起学习", description: "课程信息与校园经验" },
+    { id: "life", label: "表达与生活", description: "分享想法，找到共同兴趣" }
+  ],
+  homeHighlights: [
+    { id: "partners", title: "找个搭子", summary: "约饭 · 运动 · 两人同行" },
+    { id: "courses", title: "少走点弯路", summary: "课程方法 · 笔记 · 复习" },
+    { id: "opinions", title: "把想法写下来", summary: "网名表达 · 校园观察" },
+    { id: "life", title: "今天吃什么", summary: "外卖体验 · 同学口碑" }
   ],
   teachers: [
     { id: "cai-zhiqiang", name: "蔡智强", title: "讲席教授", department: "理学院" },

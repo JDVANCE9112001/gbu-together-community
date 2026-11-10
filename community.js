@@ -16,17 +16,9 @@
         })[c],
     );
   const uid = () => crypto.randomUUID();
-  const S = [
-    ["exchange", "校园交流", "聊聊近况，听见彼此", "◎", "social"],
-    ["partners", "找搭子", "从一个具体的小邀请开始", "↗", "social"],
-    ["roommates", "室友匹配", "先了解习惯，再商量相处", "⌂", "social"],
-    ["courses", "课程经验", "把学过的路，留给后来的人", "▤", "learn"],
-    ["teachers", "师资导航", "老师 × 课程 × 真实课堂体验", "◈", "learn"],
-    ["guide", "新生指南", "慢慢找到自己的大学节奏", "◇", "learn"],
-    ["opinions", "百家争鸣", "长一点的文字，不同的声音", "✳", "life"],
-    ["boards", "兴趣贴吧", "共同兴趣，让对话继续", "▦", "life"],
-    ["life", "生活区", "吃什么、去哪儿，一起积累经验", "☷", "life"],
-  ];
+  const S = D.navigation
+    .filter((item) => item.id !== "home")
+    .map((item) => [item.id, item.label, item.description, item.icon, item.group]);
   const label = (id) =>
     S.find((s) => s[0] === id)?.[1] ||
     { home: "社区广场", search: "搜索", me: "我的空间", saved: "我的收藏" }[
@@ -148,20 +140,14 @@
           day: "numeric",
         });
   function shell() {
-    document.body.innerHTML = `<a class="skip" href="#main">跳到内容</a><aside class="sidebar"><a href="#home" class="brand"><span class="brand-mark">同</span><span>GBU 同行<small>几百个人，也是一整个世界</small></span></a><nav aria-label="社区导航">${link("home", "<span>◉</span> 社区广场", "nav-item")}${[
-      ["social", "遇见彼此"],
-      ["learn", "一起学习"],
-      ["life", "表达与生活"],
-    ]
+    document.body.innerHTML = `<a class="skip" href="#main">跳到内容</a><aside class="sidebar"><a href="#home" class="brand"><span class="brand-mark">同</span><span>GBU 同行<small>几百个人，也是一整个世界</small></span></a><nav aria-label="社区导航">${link("home", "<span>◉</span> 社区广场", "nav-item")}${D.navigationGroups
       .map(
-        ([group, name]) =>
-          `<p class="nav-label">${name}</p>${S.filter((s) => s[4] === group)
+        ({ id, label: groupLabel }) =>
+          `<p class="nav-label">${esc(groupLabel)}</p>${S.filter((s) => s[4] === id)
             .map((s) => link(s[0], `<span>${s[3]}</span>${s[1]}`, "nav-item"))
             .join("")}`,
       )
-      .join(
-        "",
-      )}</nav><div class="sidebar-bottom">${link("saved", "<span>♧</span> 我的收藏", "nav-item")}${link("me", "<span>◌</span> 我的空间", "nav-item")}<div class="local-note"><i></i> 本机体验版<small>邀请制社区 · 独立于学校系统</small></div></div></aside><div class="workspace"><header class="topbar"><button class="mobile-menu" data-action="menu" aria-label="展开导航" aria-expanded="false">☰</button><span id="crumb">社区广场</span><form id="search-form" role="search"><label class="sr-only" for="global-search">搜索社区内容、课程、老师</label><span>⌕</span><input id="global-search" type="search" placeholder="搜内容、课程、老师…" maxlength="100"><kbd>/</kbd></form>${button("join", "邀请码加入", "quiet")}${button("compose", "＋ 发布", "primary")}</header><div class="preview-strip">正在浏览功能体验版 <span>标注「示例」的内容为演示；你的操作只保存在此浏览器。</span></div><main id="main" tabindex="-1"></main><footer>GBU 同行 · 学生自发的社区构想 <span>让经验留下，让相遇发生。</span></footer></div><dialog id="modal" aria-labelledby="modal-title"></dialog><div id="toast" role="status" hidden></div>`;
+      .join("")}</nav><div class="sidebar-bottom">${link("saved", "<span>♧</span> 我的收藏", "nav-item")}${link("me", "<span>◌</span> 我的空间", "nav-item")}<div class="local-note"><i></i> 本机体验版<small>邀请制社区 · 独立于学校系统</small></div></div></aside><div class="workspace"><header class="topbar"><button class="mobile-menu" data-action="menu" aria-label="展开导航" aria-expanded="false">☰</button><span id="crumb">社区广场</span><form id="search-form" role="search"><label class="sr-only" for="global-search">搜索社区内容、课程、老师</label><span>⌕</span><input id="global-search" type="search" placeholder="搜内容、课程、老师…" maxlength="100"><kbd>/</kbd></form>${button("join", "邀请码加入", "quiet")}${button("compose", "＋ 发布", "primary")}</header><div class="preview-strip">正在浏览功能体验版 <span>标注「示例」的内容为演示；你的操作只保存在此浏览器。</span></div><main id="main" tabindex="-1"></main><footer>GBU 同行 · 学生自发的社区构想 <span>让经验留下，让相遇发生。</span></footer></div><dialog id="modal" aria-labelledby="modal-title"></dialog><div id="toast" role="status" hidden></div>`;
   }
   function card(p, compact = false) {
     const st = store.get();
@@ -227,22 +213,27 @@
         ["exchange", "opinions", "courses", "partners"].includes(p.section),
       ),
     );
-    return `${title("YOUR EVERYDAY CAMPUS", "今天，想在校园里遇见什么？", "不用很会社交。从一个问题、一篇笔记，或一次同行开始。")}<div class="portal-grid">${[
-      ["partners", "↗", "找个搭子", "约饭 · 运动 · 两人同行"],
-      ["courses", "▤", "少走点弯路", "课程方法 · 笔记 · 复习"],
-      ["opinions", "✳", "把想法写下来", "网名表达 · 校园观察"],
-      ["life", "☷", "今天吃什么", "外卖体验 · 同学口碑"],
-    ]
-      .map(([id, icon, name, sub]) =>
+    const highlights = D.homeHighlights
+      .map((item) => ({ ...item, icon: S.find((s) => s[0] === item.id)?.[3] || "↗" }))
+      .filter((item) => S.some((s) => s[0] === item.id));
+    const spaces = D.navigationGroups
+      .map((group) => {
+        const items = S.filter((item) => item[4] === group.id);
+        if (!items.length) return "";
+        return `<section class="space-group"><div class="space-group-title"><h3>${esc(group.label)}</h3><span>${esc(group.description)}</span></div><div class="space-grid">${items
+          .map(([id, name, description, icon]) => link(id, `<span class="space-icon ${esc(id)}">${esc(icon)}</span><span><b>${esc(name)}</b><small>${esc(description)}</small></span><span class="space-arrow">↗</span>`, "space-card"))
+          .join("")}</div></section>`;
+      })
+      .join("");
+    return `${title("YOUR EVERYDAY CAMPUS", "今天，想在校园里遇见什么？", "不用很会社交。从一个问题、一篇笔记，或一次同行开始。")}<div class="portal-grid">${highlights
+      .map(({ id, icon, title: name, summary }) =>
         link(
           id,
-          `<span class="portal-icon ${id}">${icon}</span><span><b>${name}</b><small>${sub}</small></span><span>↗</span>`,
+          `<span class="portal-icon ${esc(id)}">${esc(icon)}</span><span><b>${esc(name)}</b><small>${esc(summary)}</small></span><span>↗</span>`,
           "portal",
         ),
       )
-      .join(
-        "",
-      )}</div><div class="home-layout"><div class="feed"><div class="feed-heading"><h2>社区正在发生</h2>${sortControl()}</div>${chips(["全部", "校园交流", "找搭子", "课程经验", "百家争鸣"])}<button class="quick-compose" data-action="compose"><span class="avatar">＋</span><span>分享一个想法，或发出一个小邀请…</span><b>写点什么 ↗</b></button><div class="feed-list">${list.length ? list.map((p) => card(p)).join("") : empty("这里还很安静", "试试其他分类，或者写下第一条内容。")}</div></div>${rail()}</div>`;
+      .join("")}</div><section class="space-directory"><div class="space-directory-heading"><div><p class="eyebrow">COMMUNITY MAP</p><h2>校园里的九个小空间</h2></div><p>想认识人、找学习方法，或分享一个想法，都能从这里开始。</p></div>${spaces}</section><div class="home-layout"><div class="feed"><div class="feed-heading"><h2>社区正在发生</h2>${sortControl()}</div>${chips(["全部", "校园交流", "找搭子", "课程经验", "百家争鸣"])}<button class="quick-compose" data-action="compose"><span class="avatar">＋</span><span>分享一个想法，或发出一个小邀请…</span><b>写点什么 ↗</b></button><div class="feed-list">${list.length ? list.map((p) => card(p)).join("") : empty("这里还很安静", "试试其他分类，或者写下第一条内容。")}</div></div>${rail()}</div>`;
   }
   function listing(id) {
     const meta = S.find((s) => s[0] === id),
