@@ -1,13 +1,13 @@
 /* Replaceable visual layer; content, repository and interaction logic live separately. */
 :root {
-  --paper: #f6f7f5;
+  --paper: #f7f8fa;
   --surface: #fff;
-  --ink: #253a32;
+  --ink: #172a45;
   --muted: #77847c;
   --line: #e4e9e3;
-  --green: #285745;
-  --soft: #eef3ec;
-  --accent: #e5ecd4;
+  --green: #173b67;
+  --soft: #edf2f8;
+  --accent: #e8bd70;
   --radius: 14px;
   --sidebar: 224px;
   font-family: Inter, "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
@@ -1994,3 +1994,8 @@ footer {
 
 .quick-reactions { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
 .weekly-panel { margin-bottom:18px; padding:16px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+
+.help-banner { display:flex; align-items:center; gap:14px; margin:18px 0; padding:20px 24px; border-radius:14px; color:#fff; background:linear-gradient(110deg,#15365e,#245b78); box-shadow:0 12px 32px #183b5c22; }
+.help-banner b { font-size:18px; white-space:nowrap; } .help-banner span { color:#e7eef4; font-size:13px; }
+.space-card:has(.space-icon.help), .portal:has(.portal-icon.help) { border-color:#d6a64e; background:linear-gradient(135deg,#fffdf8,#f9f1df); }
+.space-icon.help,.portal-icon.help { color:#193d68; background:#efd08f; }

@@ -14,14 +14,16 @@ window.GBU_CONTENT = {
     { id: "boards", label: "兴趣贴吧", short: "兴趣贴吧", description: "围绕课程、兴趣和校园生活开主题吧。", group: "life", icon: "▦" },
     { id: "life", label: "生活区", short: "生活区", description: "分享餐饮外卖体验，看看同学口碑榜单。", group: "life", icon: "☷" },
     { id: "vents", label: "吐槽大会", short: "吐槽大会", description: "滚动公屏短句，也可以展开成一条完整吐槽。", group: "life", icon: "≋" },
-    { id: "help", label: "求助帖", short: "求助帖", description: "把问题说清楚，让愿意帮忙的人更容易接住。", group: "social", icon: "?" }
+    { id: "help", label: "求助帖", short: "求助帖", description: "把问题说清楚，让愿意帮忙的人更容易接住。", group: "help", icon: "?" }
   ],
   navigationGroups: [
-    { id: "social", label: "遇见彼此", description: "从轻松交流到一起行动" },
-    { id: "learn", label: "一起学习", description: "课程信息与校园经验" },
-    { id: "life", label: "表达与生活", description: "分享想法，找到共同兴趣" }
+    { id: "help", label: "互相帮忙", description: "提问、回应，把问题一起解决" },
+    { id: "social", label: "遇见彼此", description: "交流、搭伴与共同生活" },
+    { id: "learn", label: "学习与课程", description: "课程经验、考后讨论与学习方法" },
+    { id: "life", label: "兴趣与表达", description: "生活分享、主题交流与自由表达" }
   ],
   homeHighlights: [
+    { id: "help", title: "需要帮忙？", summary: "课程 · 校园生活 · 新生适应" },
     { id: "partners", title: "找个搭子", summary: "约饭 · 运动 · 两人同行" },
     { id: "courses", title: "少走点弯路", summary: "课程方法 · 笔记 · 复习" },
     { id: "scores", title: "考后聊聊", summary: "匿名对答案 · 估分区间选填" },

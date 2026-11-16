@@ -256,7 +256,9 @@
                   : ["全部"];
     const list = filtered(items);
     const notice =
-      id === "opinions"
+      id === "help"
+        ? '<section class="help-banner"><b>这里可以求助</b><span>选择问题类别，说清楚卡在哪里；有进展后可把状态更新为“已解决”。</span></section>'
+        : id === "opinions"
         ? '<div class="editor-note"><span>共创预留</span><b>一个能容纳长文字的地方。</b><p>随笔、观点、诗歌与不同意见。未来可与文学社共建专题，目前尚无社团入驻。</p></div>'
         : id === "scores"
           ? '<section class="privacy-panel"><div><b>考后再聊，默认匿名</b><p>只讨论已经结束的考试。分数区间选填，不收精确分数；不要写姓名、学号、考号、座位号或其他可识别信息。</p></div><small>原型只把内容保存在当前浏览器，不会分享给其他同学；共用设备上的其他使用者可能看到本机记录。真实私密讨论需要账号和服务端权限，当前尚未实现。</small></section>'
@@ -270,7 +272,9 @@
           ? ["还没有试卷评价", "可以从难度、时间和课程覆盖写下第一条结构化反馈。"]
           : ["还没有这类内容", "你可以先保存草稿，慢慢完善。"];
     const actionLabel =
-      id === "partners"
+      id === "help"
+        ? "＋ 发布求助帖"
+        : id === "partners"
         ? "＋ 发起同行计划"
         : id === "scores"
           ? "＋ 匿名讨论考后情况"
@@ -821,6 +825,7 @@
       if (p.section === "vents" && p.ventMode === "公屏短句" && p.body.length > 120)
         return error("公屏短句请控制在 120 字以内；长内容请选择“帖子吐槽”。");
       if (p.section === "scores") p.anonymous = true;
+      if (p.section === "help") p.helpStatus = p.helpStatus || "待回应";
       const previous = store.get().posts.find((x) => x.id === p.editingId);
       const id = previous?.id || uid();
       const post = {
