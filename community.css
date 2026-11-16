@@ -2025,3 +2025,30 @@ button.primary:hover,.primary:hover { background:#103db8; color:white; }
 .quick-reactions button { padding:7px 11px; border:1px solid #cbd7e6; border-radius:2px; background:#fff; }
 .quick-reactions button.selected { border-color:#ff7a1a; color:#164de0; }
 @media(max-width:650px) { .help-banner { display:block; padding:18px; } .help-banner span { display:block; margin-top:6px; } }
+
+/* High-contrast industrial identity pass */
+.sidebar { background:#123fd1; color:#fff; border-right:0; box-shadow:5px 0 0 #ff7a1a; }
+.sidebar .brand,.sidebar .nav-item,.sidebar .nav-item:hover { color:#fff; }
+.sidebar .brand small,.sidebar .nav-label,.sidebar .local-note,.sidebar .local-note small { color:#c8d7ff; }
+.sidebar .brand-mark { color:#123fd1; background:#fff; box-shadow:4px 4px 0 #ff7a1a; }
+.sidebar .nav-item > span { color:#b8ccff; }
+.sidebar .nav-item:hover { background:#ffffff20; }
+.sidebar .nav-item.active { color:#123fd1; background:#fff; border-left:4px solid #ff7a1a; font-weight:800; }
+.sidebar .nav-item.active > span { color:#ff7a1a; }
+.sidebar .sidebar-bottom { border-color:#ffffff35; }
+.topbar { background:#fff; border-bottom:2px solid #123fd1; }
+.preview-strip { background:#fff4e9; color:#8b4309; border-bottom:1px solid #ff7a1a; }
+.page-heading h1 { color:#123fd1; font-size:34px; font-weight:800; letter-spacing:-1px; }
+.portal { min-height:94px; border-top:3px solid #123fd1; }
+.portal:hover { border-top-color:#ff7a1a; }
+button.primary,.primary { background:#ff7a1a; border-color:#ff7a1a; color:#fff; box-shadow:3px 3px 0 #123fd1; font-weight:750; }
+button.primary:hover,.primary:hover { background:#e96408; color:#fff; }
+.space-directory { border:0; border-top:3px solid #123fd1; background:#fff; }
+.space-group-title h3 { color:#123fd1; font-size:15px; font-weight:800; }
+.space-card { border-radius:0; border-color:#d8e0eb; }
+.space-icon { border-radius:0; border-right:2px solid #ff7a1a; }
+.help-banner { min-height:104px; background:#123fd1; color:#fff; border:0; border-left:8px solid #ff7a1a; box-shadow:6px 6px 0 #c9d6f5; }
+.help-banner b { color:#fff; font-size:24px; }
+.help-banner span { color:#e7edff; max-width:62%; }
+.help-banner:after { color:#ffffff15; }
+@media(max-width:850px) { .sidebar { box-shadow:none; } }
