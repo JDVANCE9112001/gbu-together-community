@@ -140,7 +140,7 @@
           day: "numeric",
         });
   function shell() {
-    document.body.innerHTML = `<a class="skip" href="#main">跳到内容</a><aside class="sidebar"><a href="#home" class="brand"><span class="brand-mark">同</span><span>GBU 同行<small>几百个人，也是一整个世界</small></span></a><nav aria-label="社区导航">${link("home", "<span>◉</span> 社区广场", "nav-item")}${D.navigationGroups
+    document.body.innerHTML = `<a class="skip" href="#main">跳到内容</a><aside class="sidebar"><a href="#home" class="brand"><span class="brand-mark"><img src="mark.svg" width="42" height="42" alt=""></span><span>GBU 同行<small>几百个人，也是一整个世界</small></span></a><nav aria-label="社区导航">${link("home", "<span>◉</span> 社区广场", "nav-item")}${D.navigationGroups
       .map(
         ({ id, label: groupLabel }) =>
           `<p class="nav-label">${esc(groupLabel)}</p>${S.filter((s) => s[4] === id)

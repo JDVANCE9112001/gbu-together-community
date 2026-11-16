@@ -2073,3 +2073,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 #main[data-section]:not([data-section="home"]) .page-heading { border:0; border-bottom:3px solid #12356f; border-radius:0; padding:18px 0 20px; background:#fff; box-shadow:none; }
 #main[data-section]:not([data-section="home"]) .page-heading h1 { color:#12356f; }
 #main[data-section]:not([data-section="home"]) .page-heading .eyebrow { color:#12356f; }
+
+.brand-mark { display:grid; place-items:center; width:44px; height:44px; flex:0 0 44px; padding:0; border-radius:0; background:#fff; box-shadow:4px 4px 0 var(--orange); }
+.brand-mark img { display:block; width:42px; height:42px; }
