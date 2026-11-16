@@ -571,7 +571,7 @@
   function fillExtra(id, p) {
     $("#compose-extra").innerHTML =
       id === "vents"
-        ? `<div class="form-two"><label class="field">发言形式<select name="ventMode"><option ${p.ventMode === "公屏短句" ? "selected" : ""}>公屏短句</option><option ${p.ventMode === "帖子吐槽" ? "selected" : ""}>帖子吐槽</option></select></label><label class="field">话题<select name="topic">${["校园日常", "学习课程", "生活体验", "随便吐槽"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div><label class="field">你希望大家怎么回应？<select name="ventIntent"><option ${p.ventIntent === "只想吐槽" ? "selected" : ""}>只想吐槽</option><option ${p.ventIntent === "想听建议" ? "selected" : ""}>想听建议</option></select></label><p class="form-note privacy-inline">短句会在公屏展示 7 天；请勿发布姓名、联系方式或针对具体个人的攻击。当前内容仅在本机。未来真实社区的匿名展示不等于平台运营者无法识别发言账号。</p>`
+        ? `<div class="form-two"><label class="field">发言形式<select name="ventMode"><option ${p.ventMode === "公屏短句" ? "selected" : ""}>公屏短句</option><option ${p.ventMode === "帖子吐槽" ? "selected" : ""}>帖子吐槽</option></select></label><label class="field">话题<select name="topic">${["校园日常", "学习课程", "生活体验", "随便吐槽"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div><label class="field">你希望大家怎么回应？<select name="ventIntent"><option value="" ${!p.ventIntent ? "selected" : ""}>不指定（选填）</option><option ${p.ventIntent === "只想吐槽" ? "selected" : ""}>只想吐槽</option><option ${p.ventIntent === "想听建议" ? "selected" : ""}>想听建议</option></select></label><p class="form-note privacy-inline">短句会在公屏展示 7 天；请勿发布姓名、联系方式或针对具体个人的攻击。当前内容仅在本机。未来真实社区的匿名展示不等于平台运营者无法识别发言账号。</p>`
         : id === "scores"
         ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">讨论主题<select name="discussionKind">${D.scoreTopics.map((topic) => `<option value="${esc(topic)}" ${p.discussionKind === topic ? "selected" : ""}>${esc(topic)}</option>`).join("")}</select></label><label class="field">分数区间（选填）<select name="scoreBand"><option value="" ${!p.scoreBand ? "selected" : ""}>不透露</option>${["60 以下", "60–69", "70–79", "80–89", "90 及以上"].map((range) => `<option value="${range}" ${p.scoreBand === range ? "selected" : ""}>${range}</option>`).join("")}</select></label><p class="form-note privacy-inline">本区固定匿名，不收精确分数；请只讨论已经结束的考试。</p>`
         : id === "papers"
@@ -828,7 +828,7 @@
             : p.section === "partners"
               ? [p.type, p.format]
                 : p.section === "vents"
-                  ? [p.ventMode, p.topic, p.ventIntent]
+                  ? [p.ventMode, p.topic, p.ventIntent].filter(Boolean)
                   : p.section === "courses"
                 ? [p.course]
                 : p.section === "boards"
