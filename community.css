@@ -1,14 +1,14 @@
 /* Replaceable visual layer; content, repository and interaction logic live separately. */
 :root {
-  --paper: #f7f8fa;
+  --paper: #f4f7fb;
   --surface: #fff;
-  --ink: #172a45;
-  --muted: #77847c;
-  --line: #e4e9e3;
-  --green: #173b67;
-  --soft: #edf2f8;
-  --accent: #e8bd70;
-  --radius: 14px;
+  --ink: #102b58;
+  --muted: #64748b;
+  --line: #d5dfeb;
+  --green: #164de0;
+  --soft: #eaf0ff;
+  --accent: #ff7a1a;
+  --radius: 4px;
   --sidebar: 224px;
   font-family: Inter, "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
   color: var(--ink);
@@ -1999,3 +1999,29 @@ footer {
 .help-banner b { font-size:18px; white-space:nowrap; } .help-banner span { color:#e7eef4; font-size:13px; }
 .space-card:has(.space-icon.help), .portal:has(.portal-icon.help) { border-color:#d6a64e; background:linear-gradient(135deg,#fffdf8,#f9f1df); }
 .space-icon.help,.portal-icon.help { color:#193d68; background:#efd08f; }
+
+/* Quantum blue / white / orange: industrial grid system */
+:root { --orange:#ff7a1a; --quantum:#164de0; }
+body { background-color:#f4f7fb; background-image:linear-gradient(#164de008 1px,transparent 1px),linear-gradient(90deg,#164de008 1px,transparent 1px); background-size:32px 32px; }
+.sidebar { background:#fff; border-right:1px solid #cbd7e6; }
+.brand-mark { background:#164de0; border-radius:2px; box-shadow:4px 4px 0 #ff7a1a; }
+.nav-label { color:#164de0; letter-spacing:1.8px; font-weight:700; text-transform:uppercase; }
+.nav-item { border-radius:2px; border-left:2px solid transparent; }
+.nav-item.active { color:#164de0; background:#edf2ff; border-left-color:#ff7a1a; }
+.portal,.space-card,.panel,.feed-card,.article,.weekly-panel,.space-directory { border-radius:3px; border-color:#d4deea; box-shadow:none; }
+.portal:hover,.space-card:hover { transform:translateY(-2px); border-color:#164de0; box-shadow:3px 3px 0 #ff7a1a; }
+.portal-icon,.space-icon { border-radius:2px; color:#164de0; background:#edf2ff; }
+button.primary,.primary { background:#164de0; border:1px solid #164de0; border-radius:2px; box-shadow:3px 3px 0 #ff7a1a; }
+button.primary:hover,.primary:hover { background:#103db8; color:white; }
+.tag,.chips button.active { border-radius:2px; }
+.page-heading { border-bottom:1px solid #164de0; padding-bottom:18px; }
+.eyebrow { color:#164de0; letter-spacing:2.4px; }
+.help-banner { position:relative; overflow:hidden; display:flex; align-items:center; gap:18px; margin:18px 0; padding:24px 28px; border:1px solid #164de0; border-left:6px solid #ff7a1a; border-radius:3px; color:#102b58; background:#fff; box-shadow:5px 5px 0 #dce6fa; }
+.help-banner:after { content:"?"; position:absolute; right:24px; top:-28px; color:#164de010; font-size:150px; font-weight:800; line-height:1; }
+.help-banner b { position:relative; z-index:1; color:#164de0; font-size:20px; letter-spacing:.03em; }
+.help-banner span { position:relative; z-index:1; color:#41516a; }
+.space-card:has(.space-icon.help),.portal:has(.portal-icon.help) { border:1px solid #164de0; border-left:4px solid #ff7a1a; background:#fff; box-shadow:3px 3px 0 #dce6fa; }
+.space-icon.help,.portal-icon.help { color:#fff; background:#164de0; }
+.quick-reactions button { padding:7px 11px; border:1px solid #cbd7e6; border-radius:2px; background:#fff; }
+.quick-reactions button.selected { border-color:#ff7a1a; color:#164de0; }
+@media(max-width:650px) { .help-banner { display:block; padding:18px; } .help-banner span { display:block; margin-top:6px; } }
