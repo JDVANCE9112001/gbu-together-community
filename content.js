@@ -12,7 +12,8 @@ window.GBU_CONTENT = {
     { id: "guide", label: "新生指南", short: "新生指南", description: "把校园适应与学习生活的经验慢慢整理下来。", group: "learn", icon: "◇" },
     { id: "opinions", label: "百家争鸣", short: "百家争鸣", description: "用网名或匿名写下观点、长文与不同声音。", group: "life", icon: "✳" },
     { id: "boards", label: "兴趣贴吧", short: "兴趣贴吧", description: "围绕课程、兴趣和校园生活开主题吧。", group: "life", icon: "▦" },
-    { id: "life", label: "生活区", short: "生活区", description: "分享餐饮外卖体验，看看同学口碑榜单。", group: "life", icon: "☷" }
+    { id: "life", label: "生活区", short: "生活区", description: "分享餐饮外卖体验，看看同学口碑榜单。", group: "life", icon: "☷" },
+    { id: "vents", label: "吐槽大会", short: "吐槽大会", description: "滚动公屏短句，也可以展开成一条完整吐槽。", group: "life", icon: "≋" }
   ],
   navigationGroups: [
     { id: "social", label: "遇见彼此", description: "从轻松交流到一起行动" },

@@ -1972,6 +1972,22 @@ footer {
 .fixed-anonymous strong { display: block; padding: 9px 11px; border-radius: 7px; background: #f2f3ef; font-size: 13px; }
 .fixed-anonymous small { color: var(--muted); font-size: 11px; }
 .privacy-inline { color: var(--muted); font-size: 12px; }
+.vent-stage { overflow: hidden; margin: 20px 0 28px; padding: 18px 20px; border-radius: 14px; background: #202922; color: #f5f3e9; }
+.vent-stage-head { display: flex; align-items: center; gap: 9px; }
+.vent-stage-head small { margin-left: auto; color: #b7c1b4; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #b2d38a; box-shadow: 0 0 10px #b2d38a; }
+.vent-marquee { overflow: hidden; margin: 18px -20px 0; }
+.vent-track { display: flex; width: max-content; animation: vent-scroll 44s linear infinite; }
+.vent-marquee:hover .vent-track { animation-play-state: paused; }
+.vent-message { flex: 0 0 auto; max-width: 360px; margin-right: 14px; padding: 14px 17px; border: 1px solid #465248; border-radius: 10px; background: #2a352c; font-size: 13px; line-height: 1.6; }
+.vent-message small { display: block; margin-top: 5px; color: #b7c1b4; }
+.vent-stage > p, .vent-empty { margin: 12px 0 0; color: #c2cabb; font-size: 11px; }
+.vent-empty { padding: 30px 0; text-align: center; }
+.vent-post-heading { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+.vent-post-heading h2 { margin: 0; font-size: 18px; }
+.vent-post-heading small { color: var(--muted); }
+@keyframes vent-scroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .vent-track { animation: none; } }
 @media (max-width: 650px) {
   .privacy-panel { grid-template-columns: 1fr; padding: 15px; }
 }

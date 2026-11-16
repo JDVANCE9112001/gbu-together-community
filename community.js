@@ -353,6 +353,14 @@
     const ranked = [...groups.values()].sort((a, b) => b.count - a.count);
     return `${title("LITTLE THINGS, BETTER DAYS", "生活区 · 把好经验传下去。", "外卖、食堂、自习地点。记录一次具体体验，比一个笼统的分数更有帮助。", button("review", "＋ 分享生活体验", "primary"))}<div class="life-categories">${button("filter", "全部", "life-category " + (filter === "全部" ? "active" : ""), 'data-value="全部"')}${cats.map((c) => button("filter", `<b>${esc(c.name)}</b><small>${esc(c.desc)}</small>`, "life-category " + (filter === c.id ? "active" : ""), `data-value="${c.id}"`)).join("")}</div><div class="life-layout"><section class="panel"><div class="panel-title"><h2>本机体验榜</h2><span class="sample">按记录次数排序</span></div><p class="muted">只统计此浏览器的记录，不代表社区口碑。接入真实用户后才能形成社区榜单。</p>${ranked.length ? ranked.map((r, i) => `<div class="ranking"><span class="rank">${String(i + 1).padStart(2, "0")}</span><div><h3>${esc(r.place)}</h3><div class="tags">${tags([...new Set(r.tags)])}</div></div><small>${r.count} 次记录</small></div>`).join("") : empty("榜单从第一次体验开始", "没有虚构商家或评分。你可以添加一条本机记录，体验分类与排序。")}</section><section class="panel"><h2>最近体验</h2>${rs.length ? rs.map((r) => `<article class="review"><span class="sample local">本机记录</span><h3>${esc(r.place)}</h3><div class="tags">${tags(r.tags)}</div><p>${esc(r.note || "")}</p><small>${new Date(r.createdAt).toLocaleDateString("zh-CN")}</small></article>`).join("") : '<p class="muted">还没有体验。第一次分享，可以从分量、包装和等餐时间说起。</p>'}</section></div>`;
   }
+  function vents() {
+    const items = posts().filter((p) => p.section === "vents");
+    const ticker = items.filter((p) => p.ventMode === "公屏短句").slice(0, 12);
+    const belt = ticker.length
+      ? `<div class="vent-marquee"><div class="vent-track">${[...ticker, ...ticker].map((p) => `<span class="vent-message">${esc(p.body)} <small>— ${esc(p.author)}</small></span>`).join("")}</div></div>`
+      : '<div class="vent-empty">公屏还没亮起来。发一句短吐槽，让它滚动起来。</div>';
+    return `${title("LET IT OUT, KEEP IT KIND", "吐槽大会", "可以短短说一句，也可以认真写成一条帖子。尽量吐槽事情，不点名挂人。", button("compose", "＋ 发一条吐槽", "primary", 'data-section="vents"'))}<section class="vent-stage"><div class="vent-stage-head"><span class="live-dot"></span><b>近期公屏</b><small>最近 12 条 · 本机内容</small></div>${belt}<p>公屏短句会循环滚动；完整吐槽和讨论在下面展开。</p></section><div class="vent-post-heading"><h2>帖子 / 分条发言</h2><small>${items.length} 条本机内容</small></div><div class="reading-feed">${items.length ? items.map((p) => card(p)).join("") : empty("把第一句留在这里", "发公屏短句，或写一条完整吐槽。")}</div>`;
+  }
   function read(id) {
       const p = posts().find((x) => x.id === id);
     if (!p) return missing();
@@ -481,7 +489,9 @@
                 ? teachers(path[1])
                 : section === "guide"
                   ? guide()
-                  : section === "life"
+                  : section === "vents"
+                    ? vents()
+                    : section === "life"
                     ? life()
                     : section === "search"
                       ? search()
@@ -556,7 +566,9 @@
   }
   function fillExtra(id, p) {
     $("#compose-extra").innerHTML =
-      id === "scores"
+      id === "vents"
+        ? `<div class="form-two"><label class="field">发言形式<select name="ventMode"><option ${p.ventMode === "公屏短句" ? "selected" : ""}>公屏短句</option><option ${p.ventMode === "帖子吐槽" ? "selected" : ""}>帖子吐槽</option></select></label><label class="field">话题<select name="topic">${["校园日常", "学习课程", "生活体验", "随便吐槽"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div><p class="form-note privacy-inline">短句会出现在滚动公屏；请勿发布姓名、联系方式或针对具体个人的攻击。当前公屏只显示本机内容。</p>`
+        : id === "scores"
         ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">讨论主题<select name="discussionKind">${D.scoreTopics.map((topic) => `<option value="${esc(topic)}" ${p.discussionKind === topic ? "selected" : ""}>${esc(topic)}</option>`).join("")}</select></label><label class="field">分数区间（选填）<select name="scoreBand"><option value="" ${!p.scoreBand ? "selected" : ""}>不透露</option>${["60 以下", "60–69", "70–79", "80–89", "90 及以上"].map((range) => `<option value="${range}" ${p.scoreBand === range ? "selected" : ""}>${range}</option>`).join("")}</select></label><p class="form-note privacy-inline">本区固定匿名，不收精确分数；请只讨论已经结束的考试。</p>`
         : id === "papers"
           ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">评价标签（至少选一项）</label>${checks("reviewTag", D.paperReviewTags, p.tags || [])}<p class="form-note privacy-inline">评价试卷本身，不猜测出题者意图；不要上传含姓名、学号或笔迹的答卷。</p>`
@@ -595,6 +607,7 @@
       boardId: f.get("boardId"),
       course: f.get("course"),
       examLabel: f.get("examLabel"),
+      ventMode: f.get("ventMode"),
       discussionKind: f.get("discussionKind"),
       scoreBand: f.get("scoreBand"),
       topic: f.get("topic"),
@@ -788,6 +801,8 @@
         return error("请填写对应课程名称。");
       if (p.section === "papers" && !p.tags.length)
         return error("请至少选择一项试卷评价标签。");
+      if (p.section === "vents" && p.ventMode === "公屏短句" && p.body.length > 120)
+        return error("公屏短句请控制在 120 字以内；长内容请选择“帖子吐槽”。");
       if (p.section === "scores") p.anonymous = true;
       const previous = store.get().posts.find((x) => x.id === p.editingId);
       const id = previous?.id || uid();
@@ -807,7 +822,9 @@
             ? p.tags
             : p.section === "partners"
               ? [p.type, p.format]
-              : p.section === "courses"
+                : p.section === "vents"
+                  ? [p.ventMode, p.topic]
+                  : p.section === "courses"
                 ? [p.course]
                 : p.section === "boards"
                   ? [boards().find((b) => b.id === p.boardId)?.name || "主题帖"]
