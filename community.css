@@ -2052,3 +2052,42 @@ button.primary:hover,.primary:hover { background:#e96408; color:#fff; }
 .help-banner span { color:#e7edff; max-width:62%; }
 .help-banner:after { color:#ffffff15; }
 @media(max-width:850px) { .sidebar { box-shadow:none; } }
+
+/* Avant-garde campus poster system */
+:root { --sidebar:238px; }
+#main[data-section="home"] .page-heading { position:relative; isolation:isolate; overflow:hidden; display:flex; align-items:flex-end; min-height:280px; margin:-28px -32px 28px; padding:50px 42px; border:0; background:#123fd1; color:#fff; }
+#main[data-section="home"] .page-heading:before { content:""; position:absolute; z-index:-1; width:310px; height:310px; right:14%; top:-80px; border:2px solid #ffffff75; border-radius:50%; box-shadow:0 0 0 24px #ffffff10,0 0 0 50px #ffffff0c; }
+#main[data-section="home"] .page-heading:after { content:""; position:absolute; z-index:-1; width:200px; height:250px; right:10%; bottom:-80px; background:#ff7a1a; clip-path:polygon(50% 0,100% 100%,0 72%); transform:rotate(18deg); }
+#main[data-section="home"] .page-heading h1 { max-width:600px; color:#fff; font-size:clamp(38px,5.5vw,76px); line-height:1.03; letter-spacing:-.055em; }
+#main[data-section="home"] .page-heading .eyebrow { color:#ffb36f; font-size:11px; letter-spacing:.3em; }
+#main[data-section="home"] .page-heading p:not(.eyebrow) { max-width:440px; color:#e3eaff; font-size:15px; }
+#main[data-section="home"] .weekly-panel { display:grid; grid-template-columns:190px 1fr; align-items:center; border:0; border-left:5px solid #ff7a1a; background:#fff; }
+#main[data-section="home"] .weekly-panel .vent-post-heading { display:block; }
+#main[data-section="home"] .weekly-panel .vent-post-heading h2 { color:#123fd1; font-size:21px; }
+.portal-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; border-top:1px solid #123fd1; border-left:1px solid #123fd1; }
+.portal { position:relative; min-height:105px; padding:20px; border:0; border-right:1px solid #123fd1; border-bottom:1px solid #123fd1; background:#fff; }
+.portal:nth-child(3n+2) { background:#edf2ff; transform:translateY(12px); }
+.portal:nth-child(3n) .portal-icon { background:#ff7a1a; color:#fff; }
+.portal-icon { width:44px; height:48px; font-size:27px; }
+.space-directory { margin-top:45px; padding:28px 0 0; border-top:1px solid #123fd1; border-bottom:0; background:transparent; }
+.space-directory-heading { align-items:center; padding:0 12px; }
+.space-directory-heading h2 { font-size:26px; font-weight:800; color:#123fd1; }
+.space-group { display:grid; grid-template-columns:190px 1fr; gap:20px; padding:22px 12px; border-top:1px solid #aab9d2; }
+.space-group-title { display:block; margin:0; }
+.space-group-title h3 { font-size:17px; }
+.space-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.space-card { min-height:66px; border:0; border-bottom:1px solid #ccd7e7; background:#fff; }
+.space-card:hover { box-shadow:none; background:#edf2ff; transform:translateX(4px); }
+.space-card:nth-child(odd) .space-arrow { color:#ff7a1a; }
+.page-heading:not(#main .page-heading) { position:relative; }
+.page-heading h1 { font-weight:800; }
+.feed-card { border-radius:0; border-left:3px solid #164de0; }
+.feed-card:hover { border-left-color:#ff7a1a; }
+@media(max-width:850px) {
+ #main[data-section="home"] .page-heading { margin:-18px -18px 22px; min-height:250px; padding:34px 24px; }
+ #main[data-section="home"] .page-heading:before { right:-75px; }
+ #main[data-section="home"] .page-heading:after { right:0; }
+ .space-group { grid-template-columns:1fr; gap:12px; }
+ #main[data-section="home"] .weekly-panel { grid-template-columns:1fr; }
+}
+@media(max-width:600px) { .portal-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .portal:nth-child(3n+2) { transform:none; } .space-grid { grid-template-columns:1fr; } }
