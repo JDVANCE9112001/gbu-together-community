@@ -355,11 +355,15 @@
   }
   function vents() {
     const items = posts().filter((p) => p.section === "vents");
-    const ticker = items.filter((p) => p.ventMode === "公屏短句").slice(0, 12);
+    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const ticker = items
+      .filter((p) => p.ventMode === "公屏短句" && Date.parse(p.createdAt) >= weekAgo)
+      .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+      .slice(0, 12);
     const belt = ticker.length
       ? `<div class="vent-marquee"><div class="vent-track">${[...ticker, ...ticker].map((p) => `<span class="vent-message">${esc(p.body)} <small>— ${esc(p.author)}</small></span>`).join("")}</div></div>`
       : '<div class="vent-empty">公屏还没亮起来。发一句短吐槽，让它滚动起来。</div>';
-    return `${title("LET IT OUT, KEEP IT KIND", "吐槽大会", "可以短短说一句，也可以认真写成一条帖子。尽量吐槽事情，不点名挂人。", button("compose", "＋ 发一条吐槽", "primary", 'data-section="vents"'))}<section class="vent-stage"><div class="vent-stage-head"><span class="live-dot"></span><b>近期公屏</b><small>最近 12 条 · 本机内容</small></div>${belt}<p>公屏短句会循环滚动；完整吐槽和讨论在下面展开。</p></section><div class="vent-post-heading"><h2>帖子 / 分条发言</h2><small>${items.length} 条本机内容</small></div><div class="reading-feed">${items.length ? items.map((p) => card(p)).join("") : empty("把第一句留在这里", "发公屏短句，或写一条完整吐槽。")}</div>`;
+    return `${title("LET IT OUT, KEEP IT KIND", "吐槽大会", "可以短短说一句，也可以认真写成一条帖子。尽量吐槽事情，不点名挂人。", button("compose", "＋ 发一条吐槽", "primary", 'data-section="vents"'))}<section class="vent-stage"><div class="vent-stage-head"><span class="live-dot"></span><b>近期公屏</b><small>近 7 天 · 最多 12 条 · 本机内容</small></div>${belt}<p>短句只在公屏滚动展示 7 天，之后仍保留在下方帖子区。匿名是页面展示方式；未来真实社区仍需明确平台运营者和管理员的可见范围。</p></section><div class="vent-post-heading"><h2>帖子 / 分条发言</h2><small>${items.length} 条本机内容</small></div><div class="reading-feed">${items.length ? items.map((p) => card(p)).join("") : empty("把第一句留在这里", "发公屏短句，或写一条完整吐槽。")}</div>`;
   }
   function read(id) {
       const p = posts().find((x) => x.id === id);
@@ -567,7 +571,7 @@
   function fillExtra(id, p) {
     $("#compose-extra").innerHTML =
       id === "vents"
-        ? `<div class="form-two"><label class="field">发言形式<select name="ventMode"><option ${p.ventMode === "公屏短句" ? "selected" : ""}>公屏短句</option><option ${p.ventMode === "帖子吐槽" ? "selected" : ""}>帖子吐槽</option></select></label><label class="field">话题<select name="topic">${["校园日常", "学习课程", "生活体验", "随便吐槽"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div><p class="form-note privacy-inline">短句会出现在滚动公屏；请勿发布姓名、联系方式或针对具体个人的攻击。当前公屏只显示本机内容。</p>`
+        ? `<div class="form-two"><label class="field">发言形式<select name="ventMode"><option ${p.ventMode === "公屏短句" ? "selected" : ""}>公屏短句</option><option ${p.ventMode === "帖子吐槽" ? "selected" : ""}>帖子吐槽</option></select></label><label class="field">话题<select name="topic">${["校园日常", "学习课程", "生活体验", "随便吐槽"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div><label class="field">你希望大家怎么回应？<select name="ventIntent"><option ${p.ventIntent === "只想吐槽" ? "selected" : ""}>只想吐槽</option><option ${p.ventIntent === "想听建议" ? "selected" : ""}>想听建议</option></select></label><p class="form-note privacy-inline">短句会在公屏展示 7 天；请勿发布姓名、联系方式或针对具体个人的攻击。当前内容仅在本机。未来真实社区的匿名展示不等于平台运营者无法识别发言账号。</p>`
         : id === "scores"
         ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">讨论主题<select name="discussionKind">${D.scoreTopics.map((topic) => `<option value="${esc(topic)}" ${p.discussionKind === topic ? "selected" : ""}>${esc(topic)}</option>`).join("")}</select></label><label class="field">分数区间（选填）<select name="scoreBand"><option value="" ${!p.scoreBand ? "selected" : ""}>不透露</option>${["60 以下", "60–69", "70–79", "80–89", "90 及以上"].map((range) => `<option value="${range}" ${p.scoreBand === range ? "selected" : ""}>${range}</option>`).join("")}</select></label><p class="form-note privacy-inline">本区固定匿名，不收精确分数；请只讨论已经结束的考试。</p>`
         : id === "papers"
@@ -608,6 +612,7 @@
       course: f.get("course"),
       examLabel: f.get("examLabel"),
       ventMode: f.get("ventMode"),
+      ventIntent: f.get("ventIntent"),
       discussionKind: f.get("discussionKind"),
       scoreBand: f.get("scoreBand"),
       topic: f.get("topic"),
@@ -823,7 +828,7 @@
             : p.section === "partners"
               ? [p.type, p.format]
                 : p.section === "vents"
-                  ? [p.ventMode, p.topic]
+                  ? [p.ventMode, p.topic, p.ventIntent]
                   : p.section === "courses"
                 ? [p.course]
                 : p.section === "boards"
