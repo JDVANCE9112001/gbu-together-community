@@ -1991,3 +1991,6 @@ footer {
 @media (max-width: 650px) {
   .privacy-panel { grid-template-columns: 1fr; padding: 15px; }
 }
+
+.quick-reactions { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.weekly-panel { margin-bottom:18px; padding:16px; border:1px solid var(--line); border-radius:12px; background:#fff; }

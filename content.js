@@ -13,7 +13,8 @@ window.GBU_CONTENT = {
     { id: "opinions", label: "百家争鸣", short: "百家争鸣", description: "用网名或匿名写下观点、长文与不同声音。", group: "life", icon: "✳" },
     { id: "boards", label: "兴趣贴吧", short: "兴趣贴吧", description: "围绕课程、兴趣和校园生活开主题吧。", group: "life", icon: "▦" },
     { id: "life", label: "生活区", short: "生活区", description: "分享餐饮外卖体验，看看同学口碑榜单。", group: "life", icon: "☷" },
-    { id: "vents", label: "吐槽大会", short: "吐槽大会", description: "滚动公屏短句，也可以展开成一条完整吐槽。", group: "life", icon: "≋" }
+    { id: "vents", label: "吐槽大会", short: "吐槽大会", description: "滚动公屏短句，也可以展开成一条完整吐槽。", group: "life", icon: "≋" },
+    { id: "help", label: "求助帖", short: "求助帖", description: "把问题说清楚，让愿意帮忙的人更容易接住。", group: "social", icon: "?" }
   ],
   navigationGroups: [
     { id: "social", label: "遇见彼此", description: "从轻松交流到一起行动" },
@@ -28,6 +29,7 @@ window.GBU_CONTENT = {
     { id: "opinions", title: "把想法写下来", summary: "网名表达 · 校园观察" },
     { id: "life", title: "今天吃什么", summary: "外卖体验 · 同学口碑" }
   ],
+  weeklyPicks: [],
   scoreTopics: ["对答案", "估分区间", "考后感受"],
   paperReviewTags: ["整体偏难", "时间偏紧", "前易后难", "覆盖课堂重点", "偏离复习预期", "题意不够清晰", "题目有区分度", "评分标准待明确"],
   teachers: [

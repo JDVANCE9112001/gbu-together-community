@@ -7,6 +7,7 @@
     replies: {},
     saved: [],
     liked: [],
+    reactions: {},
     interests: [],
     followed: [],
     reviews: [],

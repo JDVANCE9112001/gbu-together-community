@@ -216,6 +216,8 @@
     const highlights = D.homeHighlights
       .map((item) => ({ ...item, icon: S.find((s) => s[0] === item.id)?.[3] || "↗" }))
       .filter((item) => S.some((s) => s[0] === item.id));
+    const picks = (D.weeklyPicks || []).map((id) => posts().find((p) => p.id === id)).filter(Boolean).slice(0, 3);
+    const weekly = `<section class="weekly-panel"><div class="vent-post-heading"><h2>本周精选</h2><small>编辑精选 · 定期回看</small></div>${picks.length ? picks.map((p) => card(p, true)).join("") : '<p class="muted">精选内容由社区维护者定期补充，不用虚构热度。</p>'}</section>`;
     const spaces = D.navigationGroups
       .map((group) => {
         const items = S.filter((item) => item[4] === group.id);
@@ -225,7 +227,7 @@
           .join("")}</div></section>`;
       })
       .join("");
-    return `${title("YOUR EVERYDAY CAMPUS", "今天，想在校园里遇见什么？", "不用很会社交。从一个问题、一篇笔记，或一次同行开始。")}<div class="portal-grid">${highlights
+    return `${title("YOUR EVERYDAY CAMPUS", "今天，想在校园里遇见什么？", "不用很会社交。从一个问题、一篇笔记，或一次同行开始。")}${weekly}<div class="portal-grid">${highlights
       .map(({ id, icon, title: name, summary }) =>
         link(
           id,
@@ -378,7 +380,7 @@
       .map((x) => `<p>${x}</p>`)
       .join(
         "",
-      )}</div>${p.rhythm ? `<div class="plan-box"><span>时间与节奏</span><strong>${esc(p.rhythm)}</strong><span>同行形式</span><strong>${esc(p.format || "两人同行")}</strong></div>` : ""}${["partners", "roommates"].includes(p.section) ? `<div class="interest-box"><div><b>${p.closed ? "这个计划已经结束" : p.section === "roommates" ? "愿意进一步聊聊相处习惯？" : "这个计划，你也想参加？"}</b><p>意向只记在你的本机空间，暂不向对方发送消息。</p></div>${p.closed ? "" : button("interest", st.interests.includes(id) ? "已记下意向 ✓" : "记下我的意向 ↗", "primary", `data-id="${esc(id)}"`)}</div>` : ""}<div class="article-tools">${button("save", st.saved.includes(id) ? "已收藏 ✓" : "＋ 收藏到我的空间", "secondary", `data-id="${esc(id)}"`)}${button("like", st.liked.includes(id) ? "♥ 有共鸣" : "♡ 有共鸣", "quiet", `data-id="${esc(id)}"`)}${!p.sample && p.section === "partners" ? button("close-plan", p.closed ? "重新开放计划" : "结束这个计划", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("edit", "编辑内容", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("delete-post", "删除我的内容", "quiet danger", `data-id="${esc(id)}"`) : ""}</div></article><section class="discussion"><div class="panel-title"><h2>接着聊聊 <span>${replies.length}</span></h2><small>本机讨论演示</small></div>${replies.length ? replies.map((r, i) => `<article class="reply"><span class="avatar">${esc(r.author[0])}</span><div><b>${esc(r.author)}</b><small>${i + 1} 楼 · 本机回复</small><p>${esc(r.body)}</p></div></article>`).join("") : '<p class="muted">还没有回复。一个具体的经验，也许就能接住这个话题。</p>'}<form id="reply-form" data-id="${esc(id)}"><label for="reply-body">补充你的经验或想法</label><textarea id="reply-body" name="body" rows="3" maxlength="2000" required placeholder="友好表达，允许不同的经历和看法。"></textarea><div class="form-footer">${p.section === "scores" ? '<span class="privacy-inline">本区回复也固定匿名</span>' : '<label class="checkbox"><input name="anonymous" type="checkbox">匿名回复</label>'}<button class="primary" type="submit">保存本机回复 →</button></div></form></section></div>`;
+      )}</div>${p.rhythm ? `<div class="plan-box"><span>时间与节奏</span><strong>${esc(p.rhythm)}</strong><span>同行形式</span><strong>${esc(p.format || "两人同行")}</strong></div>` : ""}${["partners", "roommates"].includes(p.section) ? `<div class="interest-box"><div><b>${p.closed ? "这个计划已经结束" : p.section === "roommates" ? "愿意进一步聊聊相处习惯？" : "这个计划，你也想参加？"}</b><p>意向只记在你的本机空间，暂不向对方发送消息。</p></div>${p.closed ? "" : button("interest", st.interests.includes(id) ? "已记下意向 ✓" : "记下我的意向 ↗", "primary", `data-id="${esc(id)}"`)}</div>` : ""}<div class="article-tools">${button("save", st.saved.includes(id) ? "已收藏 ✓" : "＋ 收藏到我的空间", "secondary", `data-id="${esc(id)}"`)}${button("like", st.liked.includes(id) ? "♥ 有共鸣" : "♡ 有共鸣", "quiet", `data-id="${esc(id)}"`)}${!p.sample && p.section === "partners" ? button("close-plan", p.closed ? "重新开放计划" : "结束这个计划", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("edit", "编辑内容", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("delete-post", "删除我的内容", "quiet danger", `data-id="${esc(id)}"`) : ""}</div><div class="quick-reactions">${["收到", "我也遇到过", "有帮助"].map((kind) => button("reaction", `${kind} · ${(st.reactions?.[id] || []).includes(kind) ? "✓" : "♡"}`, (st.reactions?.[id] || []).includes(kind) ? "selected" : "", `data-id="${esc(id)}" data-kind="${kind}"`)).join("")}</div></article><section class="discussion"><div class="panel-title"><h2>接着聊聊 <span>${replies.length}</span></h2><small>本机讨论演示</small></div>${replies.length ? replies.map((r, i) => `<article class="reply"><span class="avatar">${esc(r.author[0])}</span><div><b>${esc(r.author)}</b><small>${i + 1} 楼 · 本机回复</small><p>${esc(r.body)}</p></div></article>`).join("") : '<p class="muted">还没有回复。一个具体的经验，也许就能接住这个话题。</p>'}<form id="reply-form" data-id="${esc(id)}"><label for="reply-body">补充你的经验或想法</label><textarea id="reply-body" name="body" rows="3" maxlength="2000" required placeholder="友好表达，允许不同的经历和看法。"></textarea><div class="form-footer">${p.section === "scores" ? '<span class="privacy-inline">本区回复也固定匿名</span>' : '<label class="checkbox"><input name="anonymous" type="checkbox">匿名回复</label>'}<button class="primary" type="submit">保存本机回复 →</button></div></form></section></div>`;
   }
   function search() {
     const q = query.trim().toLowerCase(),
@@ -570,7 +572,9 @@
   }
   function fillExtra(id, p) {
     $("#compose-extra").innerHTML =
-      id === "vents"
+      id === "help"
+        ? `<div class="form-two"><label class="field">求助类别<select name="helpType">${["课程作业", "选课学习", "校园生活", "人际适应", "其他问题"].map((x) => `<option ${p.helpType === x ? "selected" : ""}>${x}</option>`).join("")}</select></label><label class="field">当前状态<select name="helpStatus"><option>待回应</option><option>已解决</option></select></label></div><p class="form-note">尽量说明你已经尝试过什么，以及希望得到哪种帮助。可以匿名发帖。</p>`
+        : id === "vents"
         ? `<div class="form-two"><label class="field">发言形式<select name="ventMode"><option ${p.ventMode === "公屏短句" ? "selected" : ""}>公屏短句</option><option ${p.ventMode === "帖子吐槽" ? "selected" : ""}>帖子吐槽</option></select></label><label class="field">话题<select name="topic">${["校园日常", "学习课程", "生活体验", "随便吐槽"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div><label class="field">你希望大家怎么回应？<select name="ventIntent"><option value="" ${!p.ventIntent ? "selected" : ""}>不指定（选填）</option><option ${p.ventIntent === "只想吐槽" ? "selected" : ""}>只想吐槽</option><option ${p.ventIntent === "想听建议" ? "selected" : ""}>想听建议</option></select></label><p class="form-note privacy-inline">短句会在公屏展示 7 天；请勿发布姓名、联系方式或针对具体个人的攻击。当前内容仅在本机。未来真实社区的匿名展示不等于平台运营者无法识别发言账号。</p>`
         : id === "scores"
         ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">讨论主题<select name="discussionKind">${D.scoreTopics.map((topic) => `<option value="${esc(topic)}" ${p.discussionKind === topic ? "selected" : ""}>${esc(topic)}</option>`).join("")}</select></label><label class="field">分数区间（选填）<select name="scoreBand"><option value="" ${!p.scoreBand ? "selected" : ""}>不透露</option>${["60 以下", "60–69", "70–79", "80–89", "90 及以上"].map((range) => `<option value="${range}" ${p.scoreBand === range ? "selected" : ""}>${range}</option>`).join("")}</select></label><p class="form-note privacy-inline">本区固定匿名，不收精确分数；请只讨论已经结束的考试。</p>`
@@ -612,6 +616,8 @@
       course: f.get("course"),
       examLabel: f.get("examLabel"),
       ventMode: f.get("ventMode"),
+      helpType: f.get("helpType"),
+      helpStatus: f.get("helpStatus"),
       ventIntent: f.get("ventIntent"),
       discussionKind: f.get("discussionKind"),
       scoreBand: f.get("scoreBand"),
@@ -698,6 +704,12 @@
       );
     if (action === "dismiss") $("#modal").close();
     if (action === "join") join();
+    if (action === "reaction") {
+      const id = a.dataset.id, kind = a.dataset.kind;
+      commit((s) => { s.reactions ||= {}; s.reactions[id] ||= []; s.reactions[id] = s.reactions[id].includes(kind) ? s.reactions[id].filter((x) => x !== kind) : [...s.reactions[id], kind]; });
+      render();
+      return;
+    }
     if (
       action === "like" ||
       action === "save" ||
@@ -827,7 +839,9 @@
             ? p.tags
             : p.section === "partners"
               ? [p.type, p.format]
-                : p.section === "vents"
+                : p.section === "help"
+                  ? [p.helpType, p.helpStatus]
+                  : p.section === "vents"
                   ? [p.ventMode, p.topic, p.ventIntent].filter(Boolean)
                   : p.section === "courses"
                 ? [p.course]
