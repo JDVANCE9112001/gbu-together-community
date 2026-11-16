@@ -1949,3 +1949,29 @@ footer {
   background: #f7f0e7;
   border: 1px solid #eee4d7;
 }
+.privacy-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 1fr);
+  gap: 10px 24px;
+  margin: 18px 0;
+  padding: 18px 20px;
+  border: 1px solid #dce8df;
+  border-radius: 12px;
+  background: #f2f7f2;
+  color: var(--ink);
+}
+.privacy-panel b { font-size: 14px; }
+.privacy-panel p, .privacy-panel small {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.privacy-panel small { align-self: center; }
+.privacy-panel.paper-guidance { background: #f7f5ef; border-color: #e8e2d4; }
+.fixed-anonymous strong { display: block; padding: 9px 11px; border-radius: 7px; background: #f2f3ef; font-size: 13px; }
+.fixed-anonymous small { color: var(--muted); font-size: 11px; }
+.privacy-inline { color: var(--muted); font-size: 12px; }
+@media (max-width: 650px) {
+  .privacy-panel { grid-template-columns: 1fr; padding: 15px; }
+}

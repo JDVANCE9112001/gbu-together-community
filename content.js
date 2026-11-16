@@ -6,6 +6,8 @@ window.GBU_CONTENT = {
     { id: "partners", label: "找搭子", short: "找搭子", description: "按目标、兴趣和相处节奏，发起两人或小组计划。", group: "social", icon: "↗" },
     { id: "roommates", label: "室友匹配", short: "室友匹配", description: "新生可先了解彼此的作息与住宿习惯。", group: "social", icon: "⌂" },
     { id: "courses", label: "课程经验", short: "课程经验", description: "选课体验、学习方法、笔记与复习建议。", group: "learn", icon: "▤" },
+    { id: "scores", label: "成绩讨论", short: "考后对答案", description: "只聊已结束的考试；默认匿名，分数区间选填。", group: "learn", icon: "◌" },
+    { id: "papers", label: "卷子锐评", short: "卷子锐评", description: "聊题目难度、时间分配与课程覆盖，不晒个人答卷。", group: "learn", icon: "✎" },
     { id: "teachers", label: "师资导航", short: "师资导航", description: "认识老师，从具体课程体验开始。", group: "learn", icon: "◈" },
     { id: "guide", label: "新生指南", short: "新生指南", description: "把校园适应与学习生活的经验慢慢整理下来。", group: "learn", icon: "◇" },
     { id: "opinions", label: "百家争鸣", short: "百家争鸣", description: "用网名或匿名写下观点、长文与不同声音。", group: "life", icon: "✳" },
@@ -20,9 +22,13 @@ window.GBU_CONTENT = {
   homeHighlights: [
     { id: "partners", title: "找个搭子", summary: "约饭 · 运动 · 两人同行" },
     { id: "courses", title: "少走点弯路", summary: "课程方法 · 笔记 · 复习" },
+    { id: "scores", title: "考后聊聊", summary: "匿名对答案 · 估分区间选填" },
+    { id: "papers", title: "卷子锐评", summary: "难度 · 时间 · 课程覆盖" },
     { id: "opinions", title: "把想法写下来", summary: "网名表达 · 校园观察" },
     { id: "life", title: "今天吃什么", summary: "外卖体验 · 同学口碑" }
   ],
+  scoreTopics: ["对答案", "估分区间", "考后感受"],
+  paperReviewTags: ["整体偏难", "时间偏紧", "前易后难", "覆盖课堂重点", "偏离复习预期", "题意不够清晰", "题目有区分度", "评分标准待明确"],
   teachers: [
     { id: "cai-zhiqiang", name: "蔡智强", title: "讲席教授", department: "理学院" },
     { id: "bai-yang", name: "白杨", title: "助理教授", department: "先进工程学院" },
