@@ -3,15 +3,16 @@ window.GBU_CONTENT = {
   navigation: [
     { id: "home", label: "首页", short: "社区首页", description: "看看最近的讨论与精选内容。", group: "home", icon: "◉" },
     { id: "exchange", label: "校园交流", short: "校园交流", description: "日常、关系与那些不太适合发在大群里的话题。", group: "social", icon: "◎" },
+    { id: "treehole", label: "树洞", short: "树洞", description: "考试、关系或日常心事，找个地方轻轻说出来。", group: "social", icon: "◇" },
     { id: "partners", label: "找搭子", short: "找搭子", description: "按目标、兴趣和相处节奏，发起两人或小组计划。", group: "social", icon: "↗" },
     { id: "roommates", label: "室友匹配", short: "室友匹配", description: "新生可先了解彼此的作息与住宿习惯。", group: "social", icon: "⌂" },
     { id: "courses", label: "课程经验", short: "课程经验", description: "选课体验、学习方法、笔记与复习建议。", group: "learn", icon: "▤" },
-    { id: "scores", label: "成绩讨论", short: "考后对答案", description: "只聊已结束的考试；默认匿名，分数区间选填。", group: "learn", icon: "◌" },
+    { id: "scores", label: "考后交流", short: "考后交流", description: "考后心情、解题思路与估分讨论，由你选择进入。", group: "learn", icon: "◌" },
     { id: "papers", label: "卷子锐评", short: "卷子锐评", description: "聊题目难度、时间分配与课程覆盖，不晒个人答卷。", group: "learn", icon: "✎" },
     { id: "teachers", label: "师资导航", short: "师资导航", description: "认识老师，从具体课程体验开始。", group: "learn", icon: "◈" },
     { id: "guide", label: "新生指南", short: "新生指南", description: "把校园适应与学习生活的经验慢慢整理下来。", group: "learn", icon: "◇" },
     { id: "opinions", label: "百家争鸣", short: "百家争鸣", description: "用网名或匿名写下观点、长文与不同声音。", group: "life", icon: "✳" },
-    { id: "boards", label: "兴趣贴吧", short: "兴趣贴吧", description: "围绕课程、兴趣和校园生活开主题吧。", group: "life", icon: "▦" },
+    { id: "boards", label: "兴趣贴吧", short: "兴趣贴吧", description: "分享校园发现、作品、兴趣与好东西。", group: "life", icon: "▦" },
     { id: "life", label: "生活区", short: "生活区", description: "分享餐饮外卖体验，看看同学口碑榜单。", group: "life", icon: "☷" },
     { id: "vents", label: "吐槽大会", short: "吐槽大会", description: "滚动公屏短句，也可以展开成一条完整吐槽。", group: "life", icon: "≋" },
     { id: "help", label: "求助帖", short: "求助帖", description: "把问题说清楚，让愿意帮忙的人更容易接住。", group: "help", icon: "?" }
@@ -26,13 +27,12 @@ window.GBU_CONTENT = {
     { id: "help", title: "需要帮忙？", summary: "课程 · 校园生活 · 新生适应" },
     { id: "partners", title: "找个搭子", summary: "约饭 · 运动 · 两人同行" },
     { id: "courses", title: "少走点弯路", summary: "课程方法 · 笔记 · 复习" },
-    { id: "scores", title: "考后聊聊", summary: "匿名对答案 · 估分区间选填" },
+    { id: "treehole", title: "找个地方说说", summary: "匿名倾诉 · 温和回应" },
     { id: "papers", title: "卷子锐评", summary: "难度 · 时间 · 课程覆盖" },
-    { id: "opinions", title: "把想法写下来", summary: "网名表达 · 校园观察" },
-    { id: "life", title: "今天吃什么", summary: "外卖体验 · 同学口碑" }
+    { id: "opinions", title: "把想法写下来", summary: "网名表达 · 校园观察" }
   ],
   weeklyPicks: [],
-  scoreTopics: ["对答案", "估分区间", "考后感受"],
+  scoreTopics: ["考后感受", "对答案", "估分区间"],
   paperReviewTags: ["整体偏难", "时间偏紧", "前易后难", "覆盖课堂重点", "偏离复习预期", "题意不够清晰", "题目有区分度", "评分标准待明确"],
   teachers: [
     { id: "cai-zhiqiang", name: "蔡智强", title: "讲席教授", department: "理学院" },
@@ -85,15 +85,15 @@ window.GBU_CONTENT = {
     { id: "e3", topic: "关系与生活", title: "礼貌的陌生人状态，怎样被轻轻打破？", excerpt: "一次具体的小邀请，比“以后常联系”更容易让关系继续。邀请也可以很轻：一起走去食堂、下课聊五分钟，或者约一小时自习。", author: "海盐柠檬", time: "本周 · 校园随笔", reads: 34 }
   ],
   boards: [
-    { id: "b1", name: "新生互助吧", mark: "新", category: "校园生活", members: 46, threads: 12, last: "第一次选课，怎么找课程信息？", desc: "新生提问、生活经验和认识同学。" },
-    { id: "b2", name: "学习搭子吧", mark: "学", category: "学习互助", members: 31, threads: 9, last: "周三晚图书馆一起自习吗", desc: "按课程和目标约自习、互相督促。" },
-    { id: "b3", name: "课程经验吧", mark: "课", category: "课程讨论", members: 38, threads: 16, last: "大学数学的笔记怎么整理？", desc: "分享课程体验、笔记和复习思路。" },
-    { id: "b4", name: "兴趣交换吧", mark: "趣", category: "兴趣交流", members: 24, threads: 7, last: "周末想找人逛展/散步", desc: "兴趣活动、书影音和小型约伴。" }
+    { id: "b1", name: "校园发现吧", mark: "发", category: "校园观察", desc: "偶遇的小猫、未走过的小路和校园里的新发现。" },
+    { id: "b2", name: "作品分享吧", mark: "作", category: "创作交流", desc: "画作、手作、小机器人；分享创作，也欢迎温和建议。" },
+    { id: "b3", name: "兴趣安利吧", mark: "趣", category: "兴趣交流", desc: "聊聊喜欢的书、电影、音乐与小众爱好。" },
+    { id: "b4", name: "好东西分享吧", mark: "享", category: "资源发现", desc: "推荐有趣的网站、工具和线上资源。" }
   ],
   boardThreads: [
-    { board: "新生互助吧", title: "第一次选课，怎么找课程信息？", author: "匿名", replies: 6, time: "2 小时前", pinned: true },
-    { board: "学习搭子吧", title: "周三晚图书馆一起自习吗", author: "松果", replies: 3, time: "4 小时前" },
-    { board: "课程经验吧", title: "大学数学的笔记怎么整理？", author: "匿名", replies: 8, time: "昨天" },
-    { board: "兴趣交换吧", title: "周末想找人逛展/散步", author: "青柠", replies: 2, time: "昨天" }
+    { board: "校园发现吧", title: "今天发现了一条没走过的小路", author: "示例同学" },
+    { board: "作品分享吧", title: "分享一件最近完成的小作品", author: "示例同学" },
+    { board: "兴趣安利吧", title: "最近喜欢的一本书或一首歌", author: "示例同学" },
+    { board: "好东西分享吧", title: "一个想推荐给同学的实用网站", author: "示例同学" }
   ]
 };

@@ -87,10 +87,10 @@
       section: "boards",
       boardId: D.boards.find((b) => b.name === p.board)?.id,
       body: [
-        "我想先了解课程目标和考核方式，再听听修过的同学怎么安排时间。你会优先看哪些信息？",
-        "希望从一小时安静自习开始，最后留十分钟交流卡住的问题。你通常什么时间方便？",
-        "最近尝试把定义、例题和错题分开记录。想听听大家怎么把它们连起来。",
-        "想找同学一起散步或看展，时间和预算都可以商量。也欢迎分享有意思的地方。",
+        "示例：记录校园里值得再走一次的小地方，欢迎补充自己的发现。",
+        "示例：可以放创作过程、成品照片的说明，以及希望收到的建议。",
+        "示例：分享一个近期喜欢的兴趣内容，说说它吸引你的地方。",
+        "示例：推荐一个实用网站或工具，说明它能解决什么问题。",
       ][i],
       tags: [p.board],
       sample: true,
@@ -140,7 +140,7 @@
           day: "numeric",
         });
   function shell() {
-    document.body.innerHTML = `<a class="skip" href="#main">跳到内容</a><aside class="sidebar"><a href="#home" class="brand"><span class="brand-mark"><img src="mark.svg" width="42" height="42" alt=""></span><span>GBU 同行<small>几百个人，也是一整个世界</small></span></a><nav aria-label="社区导航">${link("home", "<span>◉</span> 社区广场", "nav-item")}${D.navigationGroups
+    document.body.innerHTML = `<a class="skip" href="#main">跳到内容</a><aside class="sidebar"><a href="#home" class="brand"><span class="brand-mark"><img src="mark.svg" width="42" height="42" alt=""></span><span>GBU 同行<small>校园虽小，亦能遇见同频之人</small></span></a><nav aria-label="社区导航">${link("home", "<span>◉</span> 社区广场", "nav-item")}${D.navigationGroups
       .map(
         ({ id, label: groupLabel }) =>
           `<p class="nav-label">${esc(groupLabel)}</p>${S.filter((s) => s[4] === id)
@@ -210,13 +210,13 @@
   function home() {
     const list = filtered(
       posts().filter((p) =>
-        ["exchange", "opinions", "courses", "partners", "scores", "papers"].includes(p.section),
+        ["exchange", "opinions", "courses", "partners", "papers"].includes(p.section),
       ),
     );
     const highlights = D.homeHighlights
       .map((item) => ({ ...item, icon: S.find((s) => s[0] === item.id)?.[3] || "↗" }))
       .filter((item) => S.some((s) => s[0] === item.id));
-    const picks = (D.weeklyPicks || []).map((id) => posts().find((p) => p.id === id)).filter(Boolean).slice(0, 3);
+    const picks = (D.weeklyPicks || []).map((id) => posts().find((p) => p.id === id)).filter((p) => p && !["scores", "treehole"].includes(p.section)).slice(0, 3);
     const weekly = `<section class="weekly-panel"><div class="vent-post-heading"><h2>本周精选</h2><small>编辑精选 · 定期回看</small></div>${picks.length ? picks.map((p) => card(p, true)).join("") : '<p class="muted">精选内容由社区维护者定期补充，不用虚构热度。</p>'}</section>`;
     const spaces = D.navigationGroups
       .map((group) => {
@@ -235,7 +235,7 @@
           "portal",
         ),
       )
-      .join("")}</div><section class="space-directory"><div class="space-directory-heading"><div><p class="eyebrow">COMMUNITY MAP</p><h2>校园里的${S.length}个小空间</h2></div><p>想认识人、找学习方法，或分享一个想法，都能从这里开始。</p></div>${spaces}</section><div class="home-layout"><div class="feed"><div class="feed-heading"><h2>社区正在发生</h2>${sortControl()}</div>${chips(["全部", "校园交流", "找搭子", "课程经验", "成绩讨论", "卷子锐评", "百家争鸣"])}<button class="quick-compose" data-action="compose"><span class="avatar">＋</span><span>分享一个想法，或发出一个小邀请…</span><b>写点什么 ↗</b></button><div class="feed-list">${list.length ? list.map((p) => card(p)).join("") : empty("这里还很安静", "试试其他分类，或者写下第一条内容。")}</div></div>${rail()}</div>`;
+      .join("")}</div><section class="space-directory"><div class="space-directory-heading"><div><p class="eyebrow">COMMUNITY MAP</p><h2>校园里的${S.length}个小空间</h2></div><p>想认识人、找学习方法，或分享一个想法，都能从这里开始。</p></div>${spaces}</section><div class="home-layout"><div class="feed"><div class="feed-heading"><h2>社区正在发生</h2>${sortControl()}</div>${chips(["全部", "校园交流", "找搭子", "课程经验", "卷子锐评", "百家争鸣"])}<button class="quick-compose" data-action="compose"><span class="avatar">＋</span><span>分享一个想法，或发出一个小邀请…</span><b>写点什么 ↗</b></button><div class="feed-list">${list.length ? list.map((p) => card(p)).join("") : empty("这里还很安静", "试试其他分类，或者写下第一条内容。")}</div></div>${rail()}</div>`;
   }
   function listing(id) {
     const meta = S.find((s) => s[0] === id),
@@ -250,7 +250,9 @@
             : id === "opinions"
               ? ["全部", "校园观察", "学习方法", "关系与生活", "文学创作"]
               : id === "scores"
-                ? ["全部", ...D.scoreTopics]
+                ? [...D.scoreTopics, "全部"]
+                : id === "treehole"
+                  ? ["全部", "日常", "关系", "考试", "其他"]
                 : id === "papers"
                   ? ["全部", ...D.paperReviewTags]
                   : ["全部"];
@@ -258,22 +260,28 @@
     const notice =
       id === "help"
         ? '<section class="help-banner"><b>这里可以求助</b><span>选择问题类别，说清楚卡在哪里；有进展后可把状态更新为“已解决”。</span></section>'
+        : id === "treehole"
+          ? '<section class="privacy-panel"><div><b>树洞 · 匿名说说心事</b><p>考试、关系或日常都可以写。可以只想倾诉，也可以选填“想听回应”；回复也会匿名显示。</p></div><small>当前内容仅保存在这个浏览器，共用设备上的人可能看到本机记录。请避免写出自己或他人的可识别信息。</small></section>'
         : id === "opinions"
         ? '<div class="editor-note"><span>共创预留</span><b>一个能容纳长文字的地方。</b><p>随笔、观点、诗歌与不同意见。未来可与文学社共建专题，目前尚无社团入驻。</p></div>'
         : id === "scores"
-          ? '<section class="privacy-panel"><div><b>考后再聊，默认匿名</b><p>只讨论已经结束的考试。分数区间选填，不收精确分数；不要写姓名、学号、考号、座位号或其他可识别信息。</p></div><small>原型只把内容保存在当前浏览器，不会分享给其他同学；共用设备上的其他使用者可能看到本机记录。真实私密讨论需要账号和服务端权限，当前尚未实现。</small></section>'
+          ? '<section class="privacy-panel"><div><b>先聊感受，再决定聊什么</b><p>默认只看“考后感受”。需要对答案或讨论估分时，可以主动切换到对应话题；只讨论已经结束的考试。</p></div><small>本区固定匿名，分数区间选填，不收精确分数。原型仅保存在当前浏览器，共用设备上的人可能看到记录。</small></section>'
           : id === "papers"
             ? '<section class="privacy-panel paper-guidance"><div><b>锐评试卷，不针对个人</b><p>聚焦题目难度、时间分配、课程覆盖和题意表达；仅讨论已结束且允许交流的考试。不上传完整卷面、标准答案或带有个人信息的答卷。</p></div><small>当前原型不支持文件上传，内容只保存在当前浏览器；并非真实多人讨论区。</small></section>'
             : "";
     const emptyCopy =
       id === "scores"
-        ? ["还没有考后讨论", "考试结束后，可以匿名聊思路或选填一个分数区间。"]
+        ? ["还没有这类考后交流", "可以匿名写下考试结束后的感受。"]
+        : id === "treehole"
+          ? ["树洞还很安静", "可以写下心事，回应偏好由你选择。"]
         : id === "papers"
           ? ["还没有试卷评价", "可以从难度、时间和课程覆盖写下第一条结构化反馈。"]
           : ["还没有这类内容", "你可以先保存草稿，慢慢完善。"];
     const actionLabel =
       id === "help"
         ? "＋ 发布求助帖"
+        : id === "treehole"
+          ? "＋ 匿名写给树洞"
         : id === "partners"
         ? "＋ 发起同行计划"
         : id === "scores"
@@ -281,7 +289,7 @@
           : id === "papers"
             ? "＋ 评价一份试卷"
             : "＋ 分享内容";
-    return `${title("GBU / " + label(id), meta[1], meta[2], button("compose", actionLabel, "primary", `data-section="${id}"`))}${notice}<div class="section-toolbar">${chips(options)}${sortControl()}</div><div class="${id === "partners" ? "two-grid" : "reading-feed"}">${list.length ? list.map((p) => card(p)).join("") : empty(emptyCopy[0], emptyCopy[1])}</div>`;
+    return `${title("GBU / " + label(id), meta[1], meta[2], button("compose", actionLabel, "primary", `data-section="${id}"`))}${notice}<div class="section-toolbar">${chips(options)}${["scores", "treehole"].includes(id) ? "" : sortControl()}</div><div class="${id === "partners" ? "two-grid" : "reading-feed"}">${list.length ? list.map((p) => card(p)).join("") : empty(emptyCopy[0], emptyCopy[1])}</div>`;
   }
   function boardPage(id) {
     const b = boards().find((x) => x.id === id);
@@ -376,7 +384,7 @@
     if (!p) return missing();
     const st = store.get(),
       replies = st.replies[id] || [];
-    return `<div class="article-wrap">${link(p.boardId ? "boards/" + p.boardId : p.section, "← 返回" + label(p.section), "back")}<article class="article"><div class="article-kicker">${label(p.section)} <span class="sample">${stamp(p)}</span></div><h1>${esc(p.title)}</h1><div class="article-author"><span class="avatar">${esc((p.author || "同")[0])}</span>${esc(p.author || "同行者")}<span>${p.anonymous ? "匿名表达" : "网名表达"}</span></div><div class="tags">${tags(p.tags)}</div><div class="prose">${esc(
+    return `<div class="article-wrap ${esc(p.section)}">${link(p.boardId ? "boards/" + p.boardId : p.section, "← 返回" + label(p.section), "back")}<article class="article"><div class="article-kicker">${label(p.section)} <span class="sample">${stamp(p)}</span></div><h1>${esc(p.title)}</h1><div class="article-author"><span class="avatar">${esc((p.author || "同")[0])}</span>${esc(p.author || "同行者")}<span>${p.anonymous ? "匿名表达" : "网名表达"}</span></div><div class="tags">${tags(p.tags)}</div><div class="prose">${esc(
       p.body,
     )
       .split("\n")
@@ -384,13 +392,13 @@
       .map((x) => `<p>${x}</p>`)
       .join(
         "",
-      )}</div>${p.rhythm ? `<div class="plan-box"><span>时间与节奏</span><strong>${esc(p.rhythm)}</strong><span>同行形式</span><strong>${esc(p.format || "两人同行")}</strong></div>` : ""}${["partners", "roommates"].includes(p.section) ? `<div class="interest-box"><div><b>${p.closed ? "这个计划已经结束" : p.section === "roommates" ? "愿意进一步聊聊相处习惯？" : "这个计划，你也想参加？"}</b><p>意向只记在你的本机空间，暂不向对方发送消息。</p></div>${p.closed ? "" : button("interest", st.interests.includes(id) ? "已记下意向 ✓" : "记下我的意向 ↗", "primary", `data-id="${esc(id)}"`)}</div>` : ""}<div class="article-tools">${button("save", st.saved.includes(id) ? "已收藏 ✓" : "＋ 收藏到我的空间", "secondary", `data-id="${esc(id)}"`)}${button("like", st.liked.includes(id) ? "♥ 有共鸣" : "♡ 有共鸣", "quiet", `data-id="${esc(id)}"`)}${!p.sample && p.section === "partners" ? button("close-plan", p.closed ? "重新开放计划" : "结束这个计划", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("edit", "编辑内容", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("delete-post", "删除我的内容", "quiet danger", `data-id="${esc(id)}"`) : ""}</div><div class="quick-reactions">${["收到", "我也遇到过", "有帮助"].map((kind) => button("reaction", `${kind} · ${(st.reactions?.[id] || []).includes(kind) ? "✓" : "♡"}`, (st.reactions?.[id] || []).includes(kind) ? "selected" : "", `data-id="${esc(id)}" data-kind="${kind}"`)).join("")}</div></article><section class="discussion"><div class="panel-title"><h2>接着聊聊 <span>${replies.length}</span></h2><small>本机讨论演示</small></div>${replies.length ? replies.map((r, i) => `<article class="reply"><span class="avatar">${esc(r.author[0])}</span><div><b>${esc(r.author)}</b><small>${i + 1} 楼 · 本机回复</small><p>${esc(r.body)}</p></div></article>`).join("") : '<p class="muted">还没有回复。一个具体的经验，也许就能接住这个话题。</p>'}<form id="reply-form" data-id="${esc(id)}"><label for="reply-body">补充你的经验或想法</label><textarea id="reply-body" name="body" rows="3" maxlength="2000" required placeholder="友好表达，允许不同的经历和看法。"></textarea><div class="form-footer">${p.section === "scores" ? '<span class="privacy-inline">本区回复也固定匿名</span>' : '<label class="checkbox"><input name="anonymous" type="checkbox">匿名回复</label>'}<button class="primary" type="submit">保存本机回复 →</button></div></form></section></div>`;
+      )}</div>${p.rhythm ? `<div class="plan-box"><span>时间与节奏</span><strong>${esc(p.rhythm)}</strong><span>同行形式</span><strong>${esc(p.format || "两人同行")}</strong></div>` : ""}${["partners", "roommates"].includes(p.section) ? `<div class="interest-box"><div><b>${p.closed ? "这个计划已经结束" : p.section === "roommates" ? "愿意进一步聊聊相处习惯？" : "这个计划，你也想参加？"}</b><p>意向只记在你的本机空间，暂不向对方发送消息。</p></div>${p.closed ? "" : button("interest", st.interests.includes(id) ? "已记下意向 ✓" : "记下我的意向 ↗", "primary", `data-id="${esc(id)}"`)}</div>` : ""}<div class="article-tools">${button("save", st.saved.includes(id) ? "已收藏 ✓" : "＋ 收藏到我的空间", "secondary", `data-id="${esc(id)}"`)}${button("like", st.liked.includes(id) ? "♥ 有共鸣" : "♡ 有共鸣", "quiet", `data-id="${esc(id)}"`)}${!p.sample && p.section === "partners" ? button("close-plan", p.closed ? "重新开放计划" : "结束这个计划", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("edit", "编辑内容", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("delete-post", "删除我的内容", "quiet danger", `data-id="${esc(id)}"`) : ""}</div><div class="quick-reactions">${(p.section === "treehole" ? ["看见了", "抱抱你"] : ["收到", "我也遇到过", "有帮助"]).map((kind) => button("reaction", `${kind} · ${(st.reactions?.[id] || []).includes(kind) ? "✓" : "♡"}`, (st.reactions?.[id] || []).includes(kind) ? "selected" : "", `data-id="${esc(id)}" data-kind="${kind}"`)).join("")}</div></article><section class="discussion"><div class="panel-title"><h2>接着聊聊 <span>${replies.length}</span></h2><small>本机讨论演示</small></div>${replies.length ? replies.map((r, i) => `<article class="reply"><span class="avatar">${esc(r.author[0])}</span><div><b>${esc(r.author)}</b><small>${i + 1} 楼 · 本机回复</small><p>${esc(r.body)}</p></div></article>`).join("") : '<p class="muted">还没有回复。一个具体的经验，也许就能接住这个话题。</p>'}<form id="reply-form" data-id="${esc(id)}"><label for="reply-body">补充你的经验或想法</label><textarea id="reply-body" name="body" rows="3" maxlength="2000" required placeholder="友好表达，允许不同的经历和看法。"></textarea><div class="form-footer">${["scores", "treehole"].includes(p.section) ? '<span class="privacy-inline">本区回复也固定匿名</span>' : '<label class="checkbox"><input name="anonymous" type="checkbox">匿名回复</label>'}<button class="primary" type="submit">保存本机回复 →</button></div></form></section></div>`;
   }
   function search() {
     const q = query.trim().toLowerCase(),
       items = q
         ? posts().filter((p) =>
-            [p.title, p.body, p.author, ...(p.tags || [])]
+            !["scores", "treehole"].includes(p.section) && [p.title, p.body, p.author, ...(p.tags || [])]
               .join(" ")
               .toLowerCase()
               .includes(q),
@@ -475,7 +483,9 @@
         path = mapped.split("/");
       }
     }
+    const previousSection = section;
     section = path[0];
+    if (section === "scores" && previousSection !== "scores") filter = "考后感受";
     if (section === "search") query = path.slice(1).join("/");
     $("#crumb").textContent = section === "read" ? "内容详情" : label(section);
     $("#global-search").value = query;
@@ -536,8 +546,8 @@
   const foot = (text = "保存到本机") =>
     `<p class="form-note">仅保存到此浏览器，不会公开发送。正式社区将使用邀请码注册。</p><div id="form-error" role="alert"></div><div class="form-footer"><span id="draft-status"></span><button class="primary" type="submit">${text} →</button></div>`;
   function identityControl(id, anonymous = false) {
-    if (id === "scores")
-      return '<label class="field fixed-anonymous">表达身份<strong>匿名（本区固定）</strong><small>成绩讨论不显示网名，减少无意暴露身份。</small><input type="hidden" name="identity" value="anonymous"></label>';
+    if (["scores", "treehole"].includes(id))
+      return `<label class="field fixed-anonymous">表达身份<strong>匿名（本区固定）</strong><small>${id === "treehole" ? "树洞里的发言和回复都不显示网名。" : "考后交流不显示网名。"}</small><input type="hidden" name="identity" value="anonymous"></label>`;
     return `<label class="field">表达身份<select name="identity"><option value="nickname" ${anonymous ? "" : "selected"}>使用网名</option><option value="anonymous" ${anonymous ? "selected" : ""}>匿名表达</option></select></label>`;
   }
   function compose(target = "exchange", boardId = "", draft = null) {
@@ -546,11 +556,13 @@
     const initialSection = p.section || target;
     const bodyHint = initialSection === "scores"
       ? "只描述已结束考试的解题思路、估分区间或考后感受，不写可识别个人的信息。"
+      : initialSection === "treehole"
+        ? "考试、关系或生活中的心事，都可以慢慢说；不要写出自己或他人的身份信息。"
       : initialSection === "papers"
         ? "聚焦题目难度、时间分配和课程覆盖；不要上传完整卷面或他人答卷。"
         : "说说背景、你的想法，或希望一起做的事。";
     modal(
-      initialSection === "scores" ? "匿名聊聊考后情况" : initialSection === "papers" ? "评价这份试卷" : "写点什么，让连接发生",
+      initialSection === "scores" ? "匿名聊聊考后情况" : initialSection === "treehole" ? "写给树洞" : initialSection === "papers" ? "评价这份试卷" : "写点什么，让连接发生",
       `<input type="hidden" name="editingId" value="${esc(p.editingId || p.id || "")}"><div class="form-two"><label class="field">发布到<select name="section" id="compose-section">${opts.map((s) => `<option value="${s[0]}" ${s[0] === initialSection ? "selected" : ""}>${s[1]}</option>`).join("")}</select></label><div id="identity-control">${identityControl(initialSection, p.anonymous)}</div></div><div id="compose-extra"></div>${field("title", "标题", "text", p.title || "", "一个具体的问题或邀请")}<label class="field">正文<textarea name="body" rows="7" maxlength="16000" required placeholder="${esc(bodyHint)}">${esc(p.body || "")}</textarea></label>${foot("发布到本机预览")}`,
       "post",
     );
@@ -561,13 +573,15 @@
       const next = e.target.value;
       $("#identity-control").innerHTML = identityControl(
         next,
-        identity === "anonymous" || next === "scores",
+        identity === "anonymous" || ["scores", "treehole"].includes(next),
       );
       fillExtra(next, {});
-      $("#modal-title").textContent = next === "scores" ? "匿名聊聊考后情况" : next === "papers" ? "评价这份试卷" : "写点什么，让连接发生";
+      $("#modal-title").textContent = next === "scores" ? "匿名聊聊考后情况" : next === "treehole" ? "写给树洞" : next === "papers" ? "评价这份试卷" : "写点什么，让连接发生";
       const body = $("#modal-form").elements.namedItem("body");
       body.placeholder = next === "scores"
         ? "只描述已结束考试的解题思路、估分区间或考后感受，不写可识别个人的信息。"
+        : next === "treehole"
+          ? "考试、关系或生活中的心事，都可以慢慢说；不要写出自己或他人的身份信息。"
         : next === "papers"
           ? "聚焦题目难度、时间分配和课程覆盖；不要上传完整卷面或他人答卷。"
           : "说说背景、你的想法，或希望一起做的事。";
@@ -576,12 +590,14 @@
   }
   function fillExtra(id, p) {
     $("#compose-extra").innerHTML =
-      id === "help"
+      id === "treehole"
+        ? `<div class="form-two"><label class="field">心事分类<select name="topic">${["日常", "关系", "考试", "其他"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label><label class="field">希望怎样回应？<select name="treeIntent"><option value="" ${!p.treeIntent ? "selected" : ""}>不指定（选填）</option><option ${p.treeIntent === "只想倾诉" ? "selected" : ""}>只想倾诉</option><option ${p.treeIntent === "想听回应" ? "selected" : ""}>想听回应</option></select></label></div><p class="form-note privacy-inline">树洞固定匿名；当前内容仅在这个浏览器保存，共用设备上的人可能看到记录。</p>`
+        : id === "help"
         ? `<div class="form-two"><label class="field">求助类别<select name="helpType">${["课程作业", "选课学习", "校园生活", "人际适应", "其他问题"].map((x) => `<option ${p.helpType === x ? "selected" : ""}>${x}</option>`).join("")}</select></label><label class="field">当前状态<select name="helpStatus"><option>待回应</option><option>已解决</option></select></label></div><p class="form-note">尽量说明你已经尝试过什么，以及希望得到哪种帮助。可以匿名发帖。</p>`
         : id === "vents"
         ? `<div class="form-two"><label class="field">发言形式<select name="ventMode"><option ${p.ventMode === "公屏短句" ? "selected" : ""}>公屏短句</option><option ${p.ventMode === "帖子吐槽" ? "selected" : ""}>帖子吐槽</option></select></label><label class="field">话题<select name="topic">${["校园日常", "学习课程", "生活体验", "随便吐槽"].map((x) => `<option ${p.topic === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div><label class="field">你希望大家怎么回应？<select name="ventIntent"><option value="" ${!p.ventIntent ? "selected" : ""}>不指定（选填）</option><option ${p.ventIntent === "只想吐槽" ? "selected" : ""}>只想吐槽</option><option ${p.ventIntent === "想听建议" ? "selected" : ""}>想听建议</option></select></label><p class="form-note privacy-inline">短句会在公屏展示 7 天；请勿发布姓名、联系方式或针对具体个人的攻击。当前内容仅在本机。未来真实社区的匿名展示不等于平台运营者无法识别发言账号。</p>`
         : id === "scores"
-        ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">讨论主题<select name="discussionKind">${D.scoreTopics.map((topic) => `<option value="${esc(topic)}" ${p.discussionKind === topic ? "selected" : ""}>${esc(topic)}</option>`).join("")}</select></label><label class="field">分数区间（选填）<select name="scoreBand"><option value="" ${!p.scoreBand ? "selected" : ""}>不透露</option>${["60 以下", "60–69", "70–79", "80–89", "90 及以上"].map((range) => `<option value="${range}" ${p.scoreBand === range ? "selected" : ""}>${range}</option>`).join("")}</select></label><p class="form-note privacy-inline">本区固定匿名，不收精确分数；请只讨论已经结束的考试。</p>`
+        ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">讨论主题<select name="discussionKind">${D.scoreTopics.map((topic) => `<option value="${esc(topic)}" ${p.discussionKind === topic ? "selected" : ""}>${esc(topic)}</option>`).join("")}</select></label><label class="field" id="score-band-field" ${p.discussionKind === "估分区间" ? "" : "hidden"}>分数区间（选填）<select name="scoreBand"><option value="" ${!p.scoreBand ? "selected" : ""}>不透露</option>${["60 以下", "60–69", "70–79", "80–89", "90 及以上"].map((range) => `<option value="${range}" ${p.scoreBand === range ? "selected" : ""}>${range}</option>`).join("")}</select></label><p class="form-note privacy-inline">本区固定匿名，不收精确分数；请只讨论已经结束的考试。</p>`
         : id === "papers"
           ? `<div class="form-two">${field("course", "课程名称", "text", p.course || "", "课程名称或常用简称")}<label class="field">考试阶段<select name="examLabel"><option value="期中" ${p.examLabel === "期中" ? "selected" : ""}>期中</option><option value="期末" ${p.examLabel === "期末" ? "selected" : ""}>期末</option><option value="随堂测验" ${p.examLabel === "随堂测验" ? "selected" : ""}>随堂测验</option><option value="其他" ${p.examLabel === "其他" ? "selected" : ""}>其他</option></select></label></div><label class="field">评价标签（至少选一项）</label>${checks("reviewTag", D.paperReviewTags, p.tags || [])}<p class="form-note privacy-inline">评价试卷本身，不猜测出题者意图；不要上传含姓名、学号或笔迹的答卷。</p>`
           : id === "partners"
@@ -623,6 +639,7 @@
       helpType: f.get("helpType"),
       helpStatus: f.get("helpStatus"),
       ventIntent: f.get("ventIntent"),
+      treeIntent: f.get("treeIntent"),
       discussionKind: f.get("discussionKind"),
       scoreBand: f.get("scoreBand"),
       topic: f.get("topic"),
@@ -694,6 +711,8 @@
             "opinions",
             "boards",
             "roommates",
+            "treehole",
+            "scores",
           ].includes(section)
             ? section
             : "exchange"),
@@ -787,7 +806,7 @@
         body = String(f.get("body")).trim();
       if (!body) return;
       const id = e.target.dataset.id;
-      const anonymous = f.get("anonymous") || posts().find((p) => p.id === id)?.section === "scores";
+      const anonymous = f.get("anonymous") || ["scores", "treehole"].includes(posts().find((p) => p.id === id)?.section);
       commit((s) => {
         (s.replies[id] ||= []).push({
           id: uid(),
@@ -824,7 +843,8 @@
         return error("请至少选择一项试卷评价标签。");
       if (p.section === "vents" && p.ventMode === "公屏短句" && p.body.length > 120)
         return error("公屏短句请控制在 120 字以内；长内容请选择“帖子吐槽”。");
-      if (p.section === "scores") p.anonymous = true;
+      if (["scores", "treehole"].includes(p.section)) p.anonymous = true;
+      if (p.section === "scores" && p.discussionKind !== "估分区间") p.scoreBand = "";
       if (p.section === "help") p.helpStatus = p.helpStatus || "待回应";
       const previous = store.get().posts.find((x) => x.id === p.editingId);
       const id = previous?.id || uid();
@@ -838,7 +858,9 @@
         closed: previous?.closed || false,
         sample: false,
         tags:
-          ["scores", "papers"].includes(p.section)
+          p.section === "treehole"
+            ? [p.topic, p.treeIntent].filter(Boolean)
+            : ["scores", "papers"].includes(p.section)
             ? [p.course, p.examLabel, ...(p.section === "scores" ? [p.discussionKind, p.scoreBand] : p.tags)].filter(Boolean)
             : p.section === "roommates"
             ? p.tags
@@ -930,6 +952,13 @@
     notify("已保存到本机。");
   });
   document.addEventListener("change", (e) => {
+    if (e.target.name === "discussionKind") {
+      const scoreBand = $("#score-band-field");
+      if (scoreBand) {
+        scoreBand.hidden = e.target.value !== "估分区间";
+        if (scoreBand.hidden) scoreBand.querySelector("select").value = "";
+      }
+    }
     if (e.target.id === "sort") {
       sort = e.target.value;
       render();

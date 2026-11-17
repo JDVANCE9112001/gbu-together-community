@@ -2076,3 +2076,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 
 .brand-mark { display:grid; place-items:center; width:44px; height:44px; flex:0 0 44px; padding:0; border-radius:0; background:#fff; box-shadow:4px 4px 0 var(--orange); }
 .brand-mark img { display:block; width:42px; height:42px; }
+
+.field[hidden] { display:none !important; }
+.avatar.treehole { color:#12356f; background:#eaf0fa; }
+.feed-card:has(.avatar.treehole) .card-actions button[data-action="like"], .article-wrap.treehole .article-tools button[data-action="like"] { display:none; }
