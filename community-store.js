@@ -13,6 +13,7 @@
     reviews: [],
     experiences: [],
     boards: [],
+    moderationLog: [],
     profile: { name: "同行者" },
     draft: null,
   });
@@ -36,6 +37,7 @@
     "reviews",
     "experiences",
     "boards",
+    "moderationLog",
   ];
   arrays.forEach((k) => {
     if (!Array.isArray(state[k])) state[k] = [];

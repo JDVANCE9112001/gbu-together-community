@@ -21,7 +21,7 @@
     .map((item) => [item.id, item.label, item.description, item.icon, item.group]);
   const label = (id) =>
     S.find((s) => s[0] === id)?.[1] ||
-    { home: "社区广场", search: "搜索", me: "我的空间", saved: "我的收藏" }[
+    { home: "社区广场", search: "搜索", me: "我的空间", saved: "我的收藏", moderation: "审核流程演示" }[
       id
     ] ||
     "内容";
@@ -96,8 +96,10 @@
       sample: true,
     })),
   ];
-  const posts = () => [...store.get().posts, ...examples];
-  const boards = () => [...D.boards, ...store.get().boards];
+  const reviewStatus = (item) => item.reviewStatus || "approved";
+  const statusText = { pending: "待审核", approved: "已发布", changes: "待修改", rejected: "未通过" };
+  const posts = () => [...store.get().posts.filter((p) => reviewStatus(p) === "approved"), ...examples];
+  const boards = () => [...D.boards, ...store.get().boards.filter((b) => reviewStatus(b) === "approved")];
   let filter = "全部",
     sort = "推荐",
     query = "",
@@ -147,11 +149,11 @@
             .map((s) => link(s[0], `<span>${s[3]}</span>${s[1]}`, "nav-item"))
             .join("")}`,
       )
-      .join("")}</nav><div class="sidebar-bottom">${link("saved", "<span>♧</span> 我的收藏", "nav-item")}${link("me", "<span>◌</span> 我的空间", "nav-item")}<div class="local-note"><i></i> 本机体验版<small>正式版拟邀请制 · 不接学校统一认证</small></div></div></aside><div class="workspace"><header class="topbar"><button class="mobile-menu" data-action="menu" aria-label="展开导航" aria-expanded="false">☰</button><span id="crumb">社区广场</span><form id="search-form" role="search"><label class="sr-only" for="global-search">搜索社区内容、课程、老师</label><span>⌕</span><input id="global-search" type="search" placeholder="搜内容、课程、老师…" maxlength="100"><kbd>/</kbd></form>${button("join", "邀请码加入", "quiet")}${button("compose", "＋ 发布", "primary")}</header><div class="preview-strip">正在浏览功能体验版 <span>标注「示例」的内容为演示；你的操作只保存在此浏览器。</span></div><main id="main" tabindex="-1"></main><footer>GBU 同行 · 学生自发的社区构想 <span>让经验留下，让相遇发生。</span></footer></div><dialog id="modal" aria-labelledby="modal-title"></dialog><div id="toast" role="status" hidden></div>`;
+      .join("")}</nav><div class="sidebar-bottom">${link("saved", "<span>♧</span> 我的收藏", "nav-item")}${link("me", "<span>◌</span> 我的空间", "nav-item")}${link("moderation", "<span>▣</span> 审核流程演示", "nav-item")}<div class="local-note"><i></i> 本机体验版<small>审核仅为本机演示 · 无真实管理员权限</small></div></div></aside><div class="workspace"><header class="topbar"><button class="mobile-menu" data-action="menu" aria-label="展开导航" aria-expanded="false">☰</button><span id="crumb">社区广场</span><form id="search-form" role="search"><label class="sr-only" for="global-search">搜索社区内容、课程、老师</label><span>⌕</span><input id="global-search" type="search" placeholder="搜内容、课程、老师…" maxlength="100"><kbd>/</kbd></form>${button("join", "邀请码加入", "quiet")}${button("compose", "＋ 发布", "primary")}</header><div class="preview-strip">正在浏览功能体验版 <span>标注「示例」的内容为演示；投稿审核也只在此浏览器模拟。</span></div><main id="main" tabindex="-1"></main><footer>GBU 同行 · 学生发起的社区构想 <span>让经验留下，让相遇发生。</span></footer></div><dialog id="modal" aria-labelledby="modal-title"></dialog><div id="toast" role="status" hidden></div>`;
   }
   function card(p, compact = false) {
     const st = store.get();
-    return `<article class="feed-card ${compact ? "compact" : ""}"><div class="card-meta"><span class="avatar ${p.section}">${esc((p.author || "同")[0])}</span><span>${esc(p.author || "同行者")}<small>${label(p.section)} · ${stamp(p)}</small></span>${p.sample ? '<span class="sample">示例</span>' : '<span class="sample local">本机发布</span>'}${p.section === "partners" ? `<span class="availability">${p.closed ? "已结束" : "可表达兴趣"}</span>` : ""}</div><h3>${link("read/" + p.id, esc(p.title))}</h3><p class="excerpt">${esc(p.body || "")}</p><div class="tags">${tags(p.tags)}</div><div class="card-actions">${button("like", `${st.liked.includes(p.id) ? "♥" : "♡"} 有共鸣${st.liked.includes(p.id) ? " · 1" : ""}`, st.liked.includes(p.id) ? "selected" : "", `data-id="${esc(p.id)}" aria-pressed="${st.liked.includes(p.id)}"`)}${link("read/" + p.id, `↳ 讨论${(st.replies[p.id] || []).length ? " · " + st.replies[p.id].length : ""}`)}${button("save", st.saved.includes(p.id) ? "已收藏" : "＋ 收藏", st.saved.includes(p.id) ? "selected" : "", `data-id="${esc(p.id)}" aria-pressed="${st.saved.includes(p.id)}"`)}${p.section === "partners" ? link("read/" + p.id, "看看计划 ↗", "push") : ""}</div></article>`;
+    return `<article class="feed-card ${compact ? "compact" : ""}"><div class="card-meta"><span class="avatar ${p.section}">${esc((p.author || "同")[0])}</span><span>${esc(p.author || "同行者")}<small>${label(p.section)} · ${stamp(p)}</small></span>${p.sample ? '<span class="sample">示例</span>' : '<span class="sample local">本机发布</span>'}${p.section === "partners" ? `<span class="availability">${p.closed ? "已结束" : "可表达兴趣"}</span>` : ""}</div><h3>${link("read/" + p.id, esc(p.title))}</h3><p class="excerpt">${esc(p.body || "")}</p><div class="tags">${tags(p.tags)}</div><div class="card-actions">${button("like", `${st.liked.includes(p.id) ? "♥" : "♡"} 有共鸣${st.liked.includes(p.id) ? " · 1" : ""}`, st.liked.includes(p.id) ? "selected" : "", `data-id="${esc(p.id)}" aria-pressed="${st.liked.includes(p.id)}"`)}${link("read/" + p.id, `↳ 讨论${(st.replies[p.id] || []).some((r) => reviewStatus(r) === "approved") ? " · " + st.replies[p.id].filter((r) => reviewStatus(r) === "approved").length : ""}`)}${button("save", st.saved.includes(p.id) ? "已收藏" : "＋ 收藏", st.saved.includes(p.id) ? "selected" : "", `data-id="${esc(p.id)}" aria-pressed="${st.saved.includes(p.id)}"`)}${p.section === "partners" ? link("read/" + p.id, "看看计划 ↗", "push") : ""}</div></article>`;
   }
   function title(eyebrow, name, desc, action = "") {
     return `<div class="page-heading"><div><p class="eyebrow">${eyebrow}</p><h1>${name}</h1><p>${desc}</p></div>${action}</div>`;
@@ -320,7 +322,7 @@
     const teacher = D.teachers.find((t) => t.id === id);
     if (id && !teacher) return missing();
     if (teacher) {
-      const exp = store.get().experiences.filter((e) => e.teacherId === id);
+      const exp = store.get().experiences.filter((e) => e.teacherId === id && reviewStatus(e) === "approved");
       return `${link("teachers", "← 返回师资导航", "back")}${title("TEACHER × COURSE", esc(teacher.name), esc(teacher.department + " · " + teacher.title), button("experience", "＋ 记录课程体验", "primary", `data-id="${esc(id)}"`))}<div class="tip-line">评价对应具体课程和学期。标签描述授课方式，不给老师做笼统排名。</div><div class="reading-feed">${exp.length ? exp.map((e) => `<article class="feed-card"><div class="card-meta"><span class="sample local">本机记录</span><span>${esc(e.term)}</span></div><h2>${esc(e.course)}</h2><div class="tags">${tags(e.tags)}</div></article>`).join("") : empty("这门课的体验，等你来补充", "目前没有真实学生评价；老师姓名来自先前导入的官网公开目录样例。")}</div>`;
     }
     const q = query.toLowerCase();
@@ -349,7 +351,7 @@
     const cats = D.lifeCategories,
       rs = store
         .get()
-        .reviews.filter((r) => filter === "全部" || r.category === filter);
+        .reviews.filter((r) => reviewStatus(r) === "approved" && (filter === "全部" || r.category === filter));
     const groups = new Map();
     rs.forEach((r) => {
       const k = r.category + "|" + r.place.trim().toLowerCase();
@@ -380,10 +382,13 @@
     return `${title("LET IT OUT, KEEP IT KIND", "吐槽大会", "可以短短说一句，也可以认真写成一条帖子。尽量吐槽事情，不点名挂人。", button("compose", "＋ 发一条吐槽", "primary", 'data-section="vents"'))}<section class="vent-stage"><div class="vent-stage-head"><span class="live-dot"></span><b>近期公屏</b><small>近 7 天 · 最多 12 条 · 本机内容</small></div>${belt}<p>短句只在公屏滚动展示 7 天，之后仍保留在下方帖子区。匿名是页面展示方式；未来真实社区仍需明确平台运营者和管理员的可见范围。</p></section><div class="vent-post-heading"><h2>帖子 / 分条发言</h2><small>${items.length} 条本机内容</small></div><div class="reading-feed">${items.length ? items.map((p) => card(p)).join("") : empty("把第一句留在这里", "发公屏短句，或写一条完整吐槽。")}</div>`;
   }
   function read(id) {
-      const p = posts().find((x) => x.id === id);
+    const p = posts().find((x) => x.id === id) || store.get().posts.find((x) => x.id === id);
     if (!p) return missing();
+    if (!p.sample && reviewStatus(p) !== "approved")
+      return `<div class="article-wrap">${link("me", "← 返回我的投稿", "back")}<article class="article moderation-item"><span class="review-badge ${esc(reviewStatus(p))}">${statusText[reviewStatus(p)] || "待审核"}</span><h1>${esc(p.title)}</h1><p class="muted">这条投稿只在当前浏览器的个人空间和审核演示中可见，尚未进入社区列表。</p>${p.reviewReason ? `<p class="review-reason">审核反馈：${esc(p.reviewReason)}</p>` : ""}<div class="prose">${esc(p.body).split("\n").filter(Boolean).map((x) => `<p>${x}</p>`).join("")}</div><div class="article-tools">${button("edit", "修改投稿", "secondary", `data-id="${esc(id)}"`)}${button("delete-post", "删除投稿", "quiet danger", `data-id="${esc(id)}"`)}</div></article></div>`;
     const st = store.get(),
-      replies = st.replies[id] || [];
+      replies = (st.replies[id] || []).filter((r) => reviewStatus(r) === "approved"),
+      pendingReplies = (st.replies[id] || []).filter((r) => reviewStatus(r) === "pending").length;
     return `<div class="article-wrap ${esc(p.section)}">${link(p.boardId ? "boards/" + p.boardId : p.section, "← 返回" + label(p.section), "back")}<article class="article"><div class="article-kicker">${label(p.section)} <span class="sample">${stamp(p)}</span></div><h1>${esc(p.title)}</h1><div class="article-author"><span class="avatar">${esc((p.author || "同")[0])}</span>${esc(p.author || "同行者")}<span>${p.anonymous ? "匿名表达" : "网名表达"}</span></div><div class="tags">${tags(p.tags)}</div><div class="prose">${esc(
       p.body,
     )
@@ -392,7 +397,7 @@
       .map((x) => `<p>${x}</p>`)
       .join(
         "",
-      )}</div>${p.rhythm ? `<div class="plan-box"><span>时间与节奏</span><strong>${esc(p.rhythm)}</strong><span>同行形式</span><strong>${esc(p.format || "两人同行")}</strong></div>` : ""}${["partners", "roommates"].includes(p.section) ? `<div class="interest-box"><div><b>${p.closed ? "这个计划已经结束" : p.section === "roommates" ? "愿意进一步聊聊相处习惯？" : "这个计划，你也想参加？"}</b><p>意向只记在你的本机空间，暂不向对方发送消息。</p></div>${p.closed ? "" : button("interest", st.interests.includes(id) ? "已记下意向 ✓" : "记下我的意向 ↗", "primary", `data-id="${esc(id)}"`)}</div>` : ""}<div class="article-tools">${button("save", st.saved.includes(id) ? "已收藏 ✓" : "＋ 收藏到我的空间", "secondary", `data-id="${esc(id)}"`)}${button("like", st.liked.includes(id) ? "♥ 有共鸣" : "♡ 有共鸣", "quiet", `data-id="${esc(id)}"`)}${!p.sample && p.section === "partners" ? button("close-plan", p.closed ? "重新开放计划" : "结束这个计划", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("edit", "编辑内容", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("delete-post", "删除我的内容", "quiet danger", `data-id="${esc(id)}"`) : ""}</div><div class="quick-reactions">${(p.section === "treehole" ? ["看见了", "抱抱你"] : ["收到", "我也遇到过", "有帮助"]).map((kind) => button("reaction", `${kind} · ${(st.reactions?.[id] || []).includes(kind) ? "✓" : "♡"}`, (st.reactions?.[id] || []).includes(kind) ? "selected" : "", `data-id="${esc(id)}" data-kind="${kind}"`)).join("")}</div></article><section class="discussion"><div class="panel-title"><h2>接着聊聊 <span>${replies.length}</span></h2><small>本机讨论演示</small></div>${replies.length ? replies.map((r, i) => `<article class="reply"><span class="avatar">${esc(r.author[0])}</span><div><b>${esc(r.author)}</b><small>${i + 1} 楼 · 本机回复</small><p>${esc(r.body)}</p></div></article>`).join("") : '<p class="muted">还没有回复。一个具体的经验，也许就能接住这个话题。</p>'}<form id="reply-form" data-id="${esc(id)}"><label for="reply-body">${p.section === "treehole" ? (p.treeIntent === "只想倾诉" ? "留一句温和的回应" : "回应这段心事") : "补充你的经验或想法"}</label><textarea id="reply-body" name="body" rows="3" maxlength="2000" required placeholder="${p.section === "treehole" ? (p.treeIntent === "只想倾诉" ? "对方此刻只想倾诉；可以表达理解，先不提建议。" : "先回应感受，再分享想法。") : "友好表达，允许不同的经历和看法。"}"></textarea><div class="form-footer">${["scores", "treehole"].includes(p.section) ? '<span class="privacy-inline">本区回复也固定匿名</span>' : '<label class="checkbox"><input name="anonymous" type="checkbox">匿名回复</label>'}<button class="primary" type="submit">保存本机回复 →</button></div></form></section></div>`;
+      )}</div>${p.rhythm ? `<div class="plan-box"><span>时间与节奏</span><strong>${esc(p.rhythm)}</strong><span>同行形式</span><strong>${esc(p.format || "两人同行")}</strong></div>` : ""}${["partners", "roommates"].includes(p.section) ? `<div class="interest-box"><div><b>${p.closed ? "这个计划已经结束" : p.section === "roommates" ? "愿意进一步聊聊相处习惯？" : "这个计划，你也想参加？"}</b><p>意向只记在你的本机空间，暂不向对方发送消息。</p></div>${p.closed ? "" : button("interest", st.interests.includes(id) ? "已记下意向 ✓" : "记下我的意向 ↗", "primary", `data-id="${esc(id)}"`)}</div>` : ""}<div class="article-tools">${button("save", st.saved.includes(id) ? "已收藏 ✓" : "＋ 收藏到我的空间", "secondary", `data-id="${esc(id)}"`)}${button("like", st.liked.includes(id) ? "♥ 有共鸣" : "♡ 有共鸣", "quiet", `data-id="${esc(id)}"`)}${!p.sample && p.section === "partners" ? button("close-plan", p.closed ? "重新开放计划" : "结束这个计划", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("edit", "编辑内容", "quiet", `data-id="${esc(id)}"`) : ""}${!p.sample ? button("delete-post", "删除我的内容", "quiet danger", `data-id="${esc(id)}"`) : ""}</div><div class="quick-reactions">${(p.section === "treehole" ? ["看见了", "抱抱你"] : ["收到", "我也遇到过", "有帮助"]).map((kind) => button("reaction", `${kind} · ${(st.reactions?.[id] || []).includes(kind) ? "✓" : "♡"}`, (st.reactions?.[id] || []).includes(kind) ? "selected" : "", `data-id="${esc(id)}" data-kind="${kind}"`)).join("")}</div></article><section class="discussion"><div class="panel-title"><h2>接着聊聊 <span>${replies.length}</span></h2><small>本机讨论演示${pendingReplies ? ` · ${pendingReplies} 条待审回复` : ""}</small></div>${replies.length ? replies.map((r, i) => `<article class="reply"><span class="avatar">${esc(r.author[0])}</span><div><b>${esc(r.author)}</b><small>${i + 1} 楼 · 本机回复</small><p>${esc(r.body)}</p></div></article>`).join("") : '<p class="muted">还没有回复。一个具体的经验，也许就能接住这个话题。</p>'}<form id="reply-form" data-id="${esc(id)}"><label for="reply-body">${p.section === "treehole" ? (p.treeIntent === "只想倾诉" ? "留一句温和的回应" : "回应这段心事") : "补充你的经验或想法"}</label><textarea id="reply-body" name="body" rows="3" maxlength="2000" required placeholder="${p.section === "treehole" ? (p.treeIntent === "只想倾诉" ? "对方此刻只想倾诉；可以表达理解，先不提建议。" : "先回应感受，再分享想法。") : "友好表达，允许不同的经历和看法。"}"></textarea><div class="form-footer">${["scores", "treehole"].includes(p.section) ? '<span class="privacy-inline">本区回复也固定匿名</span>' : '<label class="checkbox"><input name="anonymous" type="checkbox">匿名回复</label>'}<button class="primary" type="submit">保存本机回复 →</button></div></form></section></div>`;
   }
   function search() {
     const q = query.trim().toLowerCase(),
@@ -413,9 +418,7 @@
   }
   function personal(savedOnly = false) {
     const st = store.get(),
-      items = posts().filter((p) =>
-        savedOnly ? st.saved.includes(p.id) : !p.sample,
-      );
+      items = savedOnly ? posts().filter((p) => st.saved.includes(p.id)) : st.posts;
     return `${title("YOUR LITTLE CORNER", savedOnly ? "把有用的，留在手边。" : esc(st.profile.name) + "的小空间", savedOnly ? "收藏在本浏览器保存，下次回来还能找到。" : "这里汇集你的发布、同行意向和关注。当前是本机体验身份。", savedOnly ? "" : button("profile", "编辑网名", "secondary"))}${
       savedOnly
         ? ""
@@ -441,8 +444,36 @@
                   )
                   .join("")}</section>`
               : ""
-          }<h2 class="section-title">我的发布</h2>`
-    }<div class="reading-feed">${items.map((p) => card(p)).join("") || empty(savedOnly ? "还没有收藏" : "从第一条分享开始", savedOnly ? "看到想留住的内容，点一下“收藏”。" : "一个想法、一份经验，或者一场两个人的小计划。", savedOnly ? link("home", "回广场看看 →", "primary") : button("compose", "＋ 写点什么", "primary"))}</div>`;
+          }<h2 class="section-title">我的投稿</h2><p class="muted">新投稿和修改后的内容先进入本机待审队列；审核结论会显示在这里。</p>`
+    }<div class="reading-feed">${items.map((p) => !savedOnly && reviewStatus(p) !== "approved" ? `<article class="feed-card moderation-item"><span class="review-badge ${esc(reviewStatus(p))}">${statusText[reviewStatus(p)] || "待审核"}</span><h3>${link("read/" + p.id, esc(p.title))}</h3><p class="excerpt">${esc(p.body)}</p>${p.reviewReason ? `<p class="review-reason">审核反馈：${esc(p.reviewReason)}</p>` : ""}<div class="card-actions">${button("edit", "修改投稿", "secondary", `data-id="${esc(p.id)}"`)}${button("delete-post", "删除投稿", "quiet danger", `data-id="${esc(p.id)}"`)}</div></article>` : card(p)).join("") || empty(savedOnly ? "还没有收藏" : "从第一条分享开始", savedOnly ? "看到想留住的内容，点一下“收藏”。" : "一个想法、一份经验，或者一场两个人的小计划。", savedOnly ? link("home", "回广场看看 →", "primary") : button("compose", "＋ 写点什么", "primary"))}</div>${savedOnly ? "" : `<section class="panel moderation-history"><h2>其他投稿状态</h2>${reviewEntries().filter((entry) => entry.kind !== "post").map(({ item, heading }) => `<p><span class="review-badge ${esc(reviewStatus(item))}">${statusText[reviewStatus(item)] || "已发布"}</span> ${esc(heading || "回复")}${item.reviewReason ? `<small>审核反馈：${esc(item.reviewReason)}</small>` : ""}</p>`).join("") || '<p class="muted">暂无回复、主题吧或体验记录。</p>'}</section>`}`;
+  }
+  function reviewEntries() {
+    const st = store.get();
+    return [
+      ...st.posts.map((item) => ({ kind: "post", item, heading: item.title, detail: item.body })),
+      ...Object.entries(st.replies).flatMap(([postId, replies]) => replies.map((item) => ({ kind: "reply", item, heading: "回复 · " + (st.posts.find((p) => p.id === postId) || examples.find((p) => p.id === postId))?.title, detail: item.body }))),
+      ...st.boards.map((item) => ({ kind: "board", item, heading: item.name, detail: item.desc })),
+      ...st.experiences.map((item) => ({ kind: "experience", item, heading: "授课体验 · " + item.course, detail: `${item.term} · ${(item.tags || []).join("、")}` })),
+      ...st.reviews.map((item) => ({ kind: "review", item, heading: "生活体验 · " + item.place, detail: `${(item.tags || []).join("、")} · ${item.note || ""}` })),
+    ];
+  }
+  function moderation() {
+    const pending = reviewEntries().filter(({ item }) => reviewStatus(item) === "pending");
+    const history = (store.get().moderationLog || []).slice(0, 8);
+    return `${title("LOCAL REVIEW DEMO", "审核流程演示", "体验投稿进入队列、通过、退回修改和拒绝的完整状态流。")}<section class="privacy-panel moderation-warning"><div><b>这里不是正式审核后台</b><p>所有投稿和审核决定只存在当前浏览器。任何打开这个公开原型的人都能操作自己的本机队列，不能审核别人的真实投稿。</p></div><small>正式版需要账号与管理员权限、服务端审核队列、操作记录和申诉机制。不能仅靠网页按钮阻止未经审核的内容公开。</small></section><section class="panel moderation-rules"><h2>审核依据（草案）</h2><p>允许具体、善意的课程与校园意见；对个人攻击、隐私披露、未经证实的指控和进行中的考试答案重点复核。退回或拒绝时须说明具体原因。</p></section><div class="section-toolbar"><strong>待审内容 · ${pending.length}</strong>${link("me", "查看我的投稿", "secondary")}</div><div class="reading-feed">${pending.map(({ kind, item, heading, detail }) => `<article class="feed-card moderation-item"><div class="card-meta"><span class="review-badge pending">待审核</span><span>${esc({ post: "帖子", reply: "回复", board: "主题吧", experience: "授课体验", review: "生活体验" }[kind])}</span></div><h3>${esc(heading || "未命名内容")}</h3><p class="excerpt">${esc(detail || "")}</p><div class="card-actions">${button("moderate-approve", "通过并发布", "primary", `data-kind="${kind}" data-id="${esc(item.id)}"`)}${button("moderate-reason", "退回修改", "secondary", `data-kind="${kind}" data-id="${esc(item.id)}" data-decision="changes"`)}${button("moderate-reason", "拒绝", "quiet danger", `data-kind="${kind}" data-id="${esc(item.id)}" data-decision="rejected"`)}</div></article>`).join("") || empty("当前没有待审内容", "发布一条本机投稿，就能从这里体验审核流程。")}</div><section class="panel moderation-history"><h2>最近审核记录</h2>${history.length ? history.map((entry) => `<p><span>${esc(statusText[entry.decision] || entry.decision)}</span> ${esc(entry.heading)} <small>${esc(new Date(entry.at).toLocaleString("zh-CN"))}</small></p>`).join("") : '<p class="muted">暂无审核记录。</p>'}</section>`;
+  }
+  function applyDecision(kind, id, decision, reason = "") {
+    commit((s) => {
+      const entries = kind === "reply" ? Object.values(s.replies).flat() : ({ post: s.posts, board: s.boards, experience: s.experiences, review: s.reviews }[kind] || []);
+      const item = entries.find((x) => x.id === id);
+      if (!item || reviewStatus(item) !== "pending") return;
+      item.reviewStatus = decision;
+      item.reviewReason = reason;
+      item.reviewedAt = new Date().toISOString();
+      s.moderationLog ||= [];
+      s.moderationLog.unshift({ id: uid(), kind, itemId: id, heading: item.title || item.name || item.place || item.course || "回复", decision, reason, at: item.reviewedAt });
+    });
+    render();
   }
   function missing() {
     return empty(
@@ -517,6 +548,8 @@
                       ? search()
                       : section === "saved"
                         ? personal(true)
+                      : section === "moderation"
+                        ? moderation()
                         : section === "me"
                           ? personal()
                           : S.some((s) => s[0] === section)
@@ -524,7 +557,7 @@
                             : missing();
     document.title =
       (section === "read"
-        ? posts().find((p) => p.id === path[1])?.title || "内容"
+        ? (posts().find((p) => p.id === path[1]) || store.get().posts.find((p) => p.id === path[1]))?.title || "内容"
         : label(section)) + " · GBU 同行";
   }
   function modal(name, body, kind) {
@@ -544,7 +577,7 @@
   const checks = (name, options, values = []) =>
     `<div class="check-tags">${options.map((t) => `<label><input type="checkbox" name="${name}" value="${esc(t)}" ${values.includes(t) ? "checked" : ""}><span>${esc(t)}</span></label>`).join("")}</div>`;
   const foot = (text = "保存到本机") =>
-    `<p class="form-note">仅保存到此浏览器，不会公开发送。正式社区将使用邀请码注册。</p><div id="form-error" role="alert"></div><div class="form-footer"><span id="draft-status"></span><button class="primary" type="submit">${text} →</button></div>`;
+    `<p class="form-note">仅保存到此浏览器，不会公开发送；投稿将在本机模拟审核。正式社区将使用服务端账号和审核权限。</p><div id="form-error" role="alert"></div><div class="form-footer"><span id="draft-status"></span><button class="primary" type="submit">${text} →</button></div>`;
   function identityControl(id, anonymous = false) {
     if (["scores", "treehole"].includes(id))
       return `<label class="field fixed-anonymous">表达身份<strong>匿名（本区固定）</strong><small>${id === "treehole" ? "树洞里的发言和回复都不显示网名。" : "考后交流不显示网名。"}</small><input type="hidden" name="identity" value="anonymous"></label>`;
@@ -563,7 +596,7 @@
         : "说说背景、你的想法，或希望一起做的事。";
     modal(
       initialSection === "scores" ? "匿名聊聊考后情况" : initialSection === "treehole" ? "写给树洞" : initialSection === "papers" ? "评价这份试卷" : "写点什么，让连接发生",
-      `<input type="hidden" name="editingId" value="${esc(p.editingId || p.id || "")}"><div class="form-two"><label class="field">发布到<select name="section" id="compose-section">${opts.map((s) => `<option value="${s[0]}" ${s[0] === initialSection ? "selected" : ""}>${s[1]}</option>`).join("")}</select></label><div id="identity-control">${identityControl(initialSection, p.anonymous)}</div></div><div id="compose-extra"></div>${field("title", "标题", "text", p.title || "", "一个具体的问题或邀请")}<label class="field">正文<textarea name="body" rows="7" maxlength="16000" required placeholder="${esc(bodyHint)}">${esc(p.body || "")}</textarea></label>${foot("发布到本机预览")}`,
+      `<input type="hidden" name="editingId" value="${esc(p.editingId || p.id || "")}"><div class="form-two"><label class="field">发布到<select name="section" id="compose-section">${opts.map((s) => `<option value="${s[0]}" ${s[0] === initialSection ? "selected" : ""}>${s[1]}</option>`).join("")}</select></label><div id="identity-control">${identityControl(initialSection, p.anonymous)}</div></div><div id="compose-extra"></div>${field("title", "标题", "text", p.title || "", "一个具体的问题或邀请")}<label class="field">正文<textarea name="body" rows="7" maxlength="16000" required placeholder="${esc(bodyHint)}">${esc(p.body || "")}</textarea></label><p class="review-form-note">提交后先进入待审状态；审核演示通过后才出现在板块中。修改已发布内容会重新待审。</p>${foot("提交审核演示")}`,
       "post",
     );
     fillExtra(initialSection, { ...p, boardId: p.boardId || boardId });
@@ -727,6 +760,12 @@
       );
     if (action === "dismiss") $("#modal").close();
     if (action === "join") join();
+    if (action === "moderate-approve") {
+      applyDecision(a.dataset.kind, id, "approved");
+      notify("本机审核演示：内容已通过。");
+    }
+    if (action === "moderate-reason")
+      modal(a.dataset.decision === "changes" ? "退回修改" : "拒绝投稿", `<input type="hidden" name="itemId" value="${esc(id)}"><input type="hidden" name="itemKind" value="${esc(a.dataset.kind)}"><input type="hidden" name="decision" value="${esc(a.dataset.decision)}"><label class="field">给投稿者的具体原因<textarea name="reason" rows="4" maxlength="500" required placeholder="指出需要修改的具体内容或对应规则"></textarea></label>${foot("确认审核决定")}`, "moderation-decision");
     if (action === "reaction") {
       const id = a.dataset.id, kind = a.dataset.kind;
       commit((s) => { s.reactions ||= {}; s.reactions[id] ||= []; s.reactions[id] = s.reactions[id].includes(kind) ? s.reactions[id].filter((x) => x !== kind) : [...s.reactions[id], kind]; });
@@ -813,10 +852,11 @@
           body,
           author: anonymous ? "匿名同学" : s.profile.name,
           createdAt: new Date().toISOString(),
+          reviewStatus: "pending",
         });
       });
       render();
-      notify("回复已保存在本机。");
+      notify("回复已进入本机待审队列。");
       return;
     }
     if (e.target.id !== "modal-form") return;
@@ -857,6 +897,9 @@
         createdAt: previous?.createdAt || new Date().toISOString(),
         closed: previous?.closed || false,
         sample: false,
+        reviewStatus: "pending",
+        reviewReason: "",
+        submittedAt: new Date().toISOString(),
         tags:
           p.section === "treehole"
             ? [p.topic, p.treeIntent].filter(Boolean)
@@ -884,7 +927,14 @@
       $("#modal").close();
       location.hash = "read/" + id;
       render();
-      notify("已保存到本机预览；刷新后仍可查看。");
+      notify("已进入本机待审队列；可在我的投稿查看状态。");
+      return;
+    }
+    if (kind === "moderation-decision") {
+      if (!get("reason")) return error("请填写具体原因，方便投稿者修改或申诉。");
+      applyDecision(get("itemKind"), get("itemId"), get("decision"), get("reason"));
+      $("#modal").close();
+      notify("本机审核演示：已记录处理结果。");
       return;
     }
     if (kind === "profile") {
@@ -902,6 +952,7 @@
           desc: get("desc"),
           mark: get("name")[0],
           sample: false,
+          reviewStatus: "pending",
         }),
       );
     }
@@ -916,6 +967,7 @@
           course: get("course"),
           term: get("term"),
           tags: t,
+          reviewStatus: "pending",
         }),
       );
     }
@@ -931,6 +983,7 @@
           tags: t,
           note: get("note"),
           createdAt: new Date().toISOString(),
+          reviewStatus: "pending",
         }),
       );
     }
